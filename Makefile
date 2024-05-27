@@ -4,18 +4,19 @@ NAME = pipex
 
 CC = cc
 
-CFLAGS = -Werror -Wall -Wextra #-g3 -fsanitize=address
+CFLAGS = -Werror -Wall -Wextra -g3 -fsanitize=address
 
-SRC = $(wildcard *.c)
+#SRC = $(wildcard *.c)
+SRC = pipex.c \
 
-OBJ = $(SRC=%c.%o)
+OBJ = $(SRC:.c=.o)
+
+$(NAME): $(OBJ) $(libft)
+	$(CC) $(CFLAGS) $(OBJ) $(libft) -o $(NAME)
 
 $(libft):
 	make -C libft
 	cd libft && mv libft.a ../
-
-$(NAME): $(OBJ) $(libft)
-	$(CC) $(CFLAGS) $(OBJ) $(libft) -o $(NAME)
 
 all: $(NAME)
 

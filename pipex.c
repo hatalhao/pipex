@@ -12,9 +12,75 @@
 
 #include "pipex.h"
 
-int main(int ac, char **av)
+void	free_arr(char **arr)
 {
-	if (ac < 4)
+	int	i;
+
+	i = 0;
+	while (arr && arr[i])
+		free (arr[i++]);
+	free (arr);
+}
+
+char	**get_paths(char *envp)
+{
+	char	**paths;
+
+	if (!envp)
+		return (NULL);
+	paths = ft_split(envp, ':');
+	return (paths);
+}
+
+void	preliminaries(char **av, char **envp)
+{
+	char	**paths;
+	char	*buffer;
+	int		v;
+	int		i;
+	int		j;
+
+	i = 0;
+	j = 1;
+	while (envp && envp[i])
+	{
+		if (!ft_strncmp("PATH", envp[i], 4))
+			break ;
+		i++;
+	}
+	paths = get_paths((envp[i]));
+	while (paths[j])
+		printf("==> %s\n", paths[j++]);
+	i = 1;
+	while (paths[i] && v != 0)
+	{
+		buffer = ft_join(ft_join(ft_duplicate(paths[i]), ft_duplicate("/")), ft_duplicate(*av));
+		printf("buffer -------> %s\n", buffer);
+		v = access(buffer, X_OK);
+		if (v == 0)
+		{
+			printf("ACCESS GRANTED\n");
+			free (buffer);
+			free_arr(paths);
+			break ;
+		}
+		printf("v = %d, Therefore, ls is Not in This Path\n", v);
+		printf("----------------------------------------------------------------\n");
+		free (buffer);
+		i++;
+	}
+	if (v == -1)
+	{
+		printf("ACCESS_FAILURE");
+		exit (1);
+	}
+}
+
+int main(int ac, char **av, char **envp)
+{
+	if (ac == 5)
 		return (1);
-	
+	preliminaries(av + 1, envp);
+	// parsing();
+	return (0);
 }

@@ -12,9 +12,31 @@
 
 #include "utiles.h"
 
-void	free_node(void	*ptr)
+void	ft_add_back(t_node **list, t_node *new)
 {
-	
+	if (!list || !*list)
+		*list = new;
+	else
+	{
+		new->next = *list;
+		
+	}
+	new->prev = NULL;
+}
+
+t_node	*new_addr(void	*ptr)
+{
+	t_node	*curr;
+
+	curr->allocated = ptr;
+	curr->next = NULL;
+}
+
+void	free_node(t_node	*node)
+{
+	t_node *tmp;
+
+	tmp = ;
 }
 
 void	ft_free(t_node	*ptr)
@@ -30,8 +52,11 @@ void	ft_free(t_node	*ptr)
 	}
 }
 
-void	ft_malloc(void	*ptr)
+void	ft_malloc(t_node **list, void **ptr, int size, int data_size)
 {
-	
+	*ptr = malloc ((size + 1) * data_size);
+	if (!*ptr)
+		return ;
+	ft_add_back(list, new_addr(*ptr));
 }
 

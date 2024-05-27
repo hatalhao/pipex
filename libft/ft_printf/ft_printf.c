@@ -1,28 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   ft_printf.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/12 02:08:25 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/05/12 02:08:26 by hatalhao         ###   ########.fr       */
+/*   Created: 2023/12/06 14:25:06 by hatalhao          #+#    #+#             */
+/*   Updated: 2023/12/06 20:21:44 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <stdio.h>
-# include <string.h>
-# include <limits.h>
-# include <stdarg.h>
-# include <stdint.h>
-# include <fcntl.h>
-# include <errno.h>
-# include "ft_printf/ft_printf.h"
-# include "gnl/get_next_line.h"
+#include "ft_printf.h"
 
-void	*ft_memcpy(void *dest, void const *src, size_t n);
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
-char	**ft_split(char const *s, char c);
+int	ft_printf(char const *str, ...)
+{
+	int		l;
+	va_list	args;
 
+	l = 0;
+	va_start(args, str);
+	while (*str)
+	{
+		if (*str == '%' && *(str + 1))
+		{
+			ft_spf(*(str + 1), args, &l);
+			str++;
+		}
+		else if (*str != '%')
+			ft_putchar(*str, &l);
+		str++;
+	}
+	va_end(args);
+	return (l);
+}

@@ -1,28 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   libft.h                                            :+:      :+:    :+:   */
+/*   ft_printf.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/05/12 02:08:25 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/05/12 02:08:26 by hatalhao         ###   ########.fr       */
+/*   Created: 2023/12/06 14:25:28 by hatalhao          #+#    #+#             */
+/*   Updated: 2023/12/06 14:33:44 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef FT_PRINTF_H
+# define FT_PRINTF_H
+
 # include <unistd.h>
-# include <stdlib.h>
 # include <stdio.h>
-# include <string.h>
-# include <limits.h>
 # include <stdarg.h>
-# include <stdint.h>
-# include <fcntl.h>
-# include <errno.h>
-# include "ft_printf/ft_printf.h"
-# include "gnl/get_next_line.h"
+# include <stdlib.h>
+# include <limits.h>
+# include <string.h>
 
-void	*ft_memcpy(void *dest, void const *src, size_t n);
-int		ft_strncmp(const char *s1, const char *s2, size_t n);
-char	**ft_split(char const *s, char c);
+int		ft_printf(char const	*str, ...);
 
+void	ft_spf(char spf, va_list args, int *l);
+void	ft_unsigned(unsigned int nb, int *c);
+void	ft_putchex(unsigned int l, int *c);
+void	ft_puthex(unsigned long l, int *c);
+void	ft_putptr(unsigned long l, int *c);
+void	ft_putstr(char *str, int *c);
+void	ft_putchar(char ch, int *c);
+void	ft_putnbr(long nb, int *c);
+
+#endif

@@ -1,0 +1,14 @@
+	-	What to Parse?
+		= Parse The First Command
+		-	How To Parse a cmd?
+			= Grammatically correct.
+			= Check its executable path accessibility and permissions.
+			= 
+	-	How To Execute A Command?
+	-	How To Pass The Output of the first cmd to the next
+
+
+First, we will have a parent process that will handle the second command.
+fork() will create a child process which will execute, using execve() and waitpid(),
+the first command and take its output, using dup2() and pipe(),
+and pipe it to the parent process; treating it as an input for the 2nd command using dup2() again.
