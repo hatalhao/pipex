@@ -1,4 +1,12 @@
-60
-151
-1595 1595
-1595
+Makefile
+TO_DO.txt
+garbage_collector.c
+libft
+libft.a
+outfile
+pipex
+pipex.c
+pipex.h
+pipex.o
+utiles.c
+utiles.h

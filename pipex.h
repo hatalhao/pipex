@@ -15,7 +15,11 @@
 
 #include "libft/libft.h"
 
-
+typedef	struct	s_cmd
+{
+	char		*path;
+	char		**args;
+}				t_cmd;
 
 
 #endif
