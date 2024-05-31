@@ -8,8 +8,8 @@
       "args": [],
       "stopAtEntry": false,
       "externalConsole": false,
-      "cwd": "/home/talhaoui/42_Cursus_REPO/custom/pipex",
-      "program": "/home/talhaoui/42_Cursus_REPO/custom/pipex/build/Debug/outDebug",
+      "cwd": "/nfs/homes/hatalhao/Desktop/pipex",
+      "program": "/nfs/homes/hatalhao/Desktop/pipex/pipex",
       "MIMode": "gdb",
       "miDebuggerPath": "gdb",
       "setupCommands": [

@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 02:05:18 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/05/12 21:30:56 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/05/31 02:55:54 by hatalhao         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "pipex.h"
 
@@ -43,17 +43,22 @@ char	**get_paths(char *envp)
 
 void	preliminaries(char **av, char **envp)
 {
+	int		pfd[2];
 	char	**paths;
 	char	*buffer;
 	t_cmd	*cmd;
 	int		v;
 	int		i;
 	int		j;
+	int		pid;
+	int		fd;
 
+	fd = open(*av, O_RDWR);
+	printf("```` fd == %d\n", fd);
 	cmd = (t_cmd *) malloc (sizeof(t_cmd));
 	i = 0;
 	j = 1;
-	if (!access(*av, X_OK))
+	if (access(*av, X_OK) == 0)
 		buffer = *av;
 	else
 	{
@@ -66,10 +71,17 @@ void	preliminaries(char **av, char **envp)
 		paths = get_paths((envp[i]));
 		while (paths[j])
 			printf("==> %s\n", paths[j++]);
+		// i = 0;
+		// while (paths[i])
+		// {
+		// 	printf("paths[%i] ----> %s\n", i, paths[i]);
+		// 	printf("-------------------------------------------------\n");
+		// 	i++;
+		// }
 		i = 1;
-		while (paths[i] && v != 0)
+		while (paths[i])
 		{
-			buffer = ft_join(ft_join(ft_duplicate(paths[i]), ft_duplicate("/")), ft_duplicate(*av));
+			buffer = ft_join(ft_join(ft_duplicate(paths[i]), ft_duplicate("/")), ft_duplicate(*(av + 1)));
 			printf("buffer -------> %s\n", buffer);
 			v = access(buffer, X_OK);
 			if (v == 0)
@@ -77,8 +89,15 @@ void	preliminaries(char **av, char **envp)
 				printf("ACCESS GRANTED\n");
 				cmd->args = get_args(*av);
 				cmd->path = buffer;
-				execve(buffer, av, NULL);
-				printf("Here\n");
+				pipe(pfd);
+				pid = fork();
+				if (pid == 0)
+				{
+					dup2(fd, 0);
+					execve(buffer, av + 1, NULL);
+				}
+				waitpid(pid, NULL, 0);
+				// printf("------>> Here\n");
 				free (buffer);
 				free_arr(paths);
 				break ;
@@ -91,6 +110,7 @@ void	preliminaries(char **av, char **envp)
 		if (v == -1)
 		{
 			printf("ACCESS_FAILURE");
+			free_arr(paths);
 			exit (1);
 		}
 	}
