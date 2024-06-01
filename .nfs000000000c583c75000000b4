@@ -15,14 +15,14 @@ $(NAME): $(OBJ) $(libft)
 	$(CC) $(CFLAGS) $(OBJ) $(libft) -o $(NAME)
 
 $(libft):
-	make -s -C libft
+	make -C libft
 	cd libft && mv libft.a ../
 
 all: $(NAME)
 
 clean: 
 	rm -rf $(OBJ)
-	make -s -C libft clean
+	make -C libft clean
 
 fclean: clean
 	rm -rf $(NAME) $(libft)
