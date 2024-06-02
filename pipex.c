@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 02:05:18 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/06/02 00:12:39 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/06/02 02:50:35 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -95,8 +95,7 @@ void preliminaries(int ac, char **av, char **envp)
 	pid = (int *)malloc(sizeof(int) * n);
 	fd = (int *)malloc(sizeof(int) * 2);
 	for (int i = 0; i < n; i++)
-
-		cmd1 = (t_cmd *)malloc(sizeof(t_cmd));
+	cmd1 = (t_cmd *)malloc(sizeof(t_cmd));
 	cmd2 = (t_cmd *)malloc(sizeof(t_cmd));
 	i = 0;
 	j = 1;
@@ -155,8 +154,10 @@ void preliminaries(int ac, char **av, char **envp)
 		// t++;
 		free_arr(paths);
 		free_arr(cmd1->args);
-		free(cmd1);
 		free_arr(cmd2->args);
+		free(cmd1->path);
+		free(cmd2->path);
+		free(cmd1);
 		free(cmd2);
 		free(pid);
 		free(fd);
