@@ -1,4 +1,0 @@
-	pid = (int *)malloc(sizeof(int) * n);
-	fd = (int *)malloc(sizeof(int) * 2);
-	cmd1 = (t_cmd *)malloc(sizeof(t_cmd));
-	cmd2 = (t_cmd *)malloc(sizeof(t_cmd));

@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 02:05:18 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/06/02 02:50:35 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/06/05 23:15:20 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -48,11 +48,10 @@ char *extract_path(char **paths, t_cmd *cmd)
 	int i;
 
 	i = 0;
+	buffer = NULL;
 	while (paths[i])
 	{
-		printf("++++++++++++++++++++++++++++++++++++++++\n");
 		buffer = ft_join(ft_join(ft_duplicate(paths[i]), ft_duplicate("/")), ft_duplicate(*(cmd->args)));
-		printf("buffer = %s\n", buffer);
 		v = access(buffer, X_OK);
 		if (!v)
 		{
@@ -69,14 +68,63 @@ char *extract_path(char **paths, t_cmd *cmd)
 	}
 	return (buffer);
 }
-// static void ft_putstr_fd(char *s, int fd)
+
+
+
+// void	assignements()
 // {
-// 	while (*s)
-// 	{
-// 		write(fd, s, 1);
-// 		s++;
-// 	}
+	
 // }
+
+char	*envp_path(char **envp)
+{
+	int		i;
+	char	*path;
+	
+	i = 0;
+	path = NULL;
+	while (envp && envp[i])
+	{
+		if (!ft_strncmp("PATH", envp[i], 4))
+		{
+			path = envp[i];
+			return (path);
+		}
+		i++;
+	}
+	return (path);
+}
+
+void	free_struct(t_cmd *cmd)
+{
+	free_arr(cmd->args);
+	free(cmd->path);
+	free(cmd);
+}
+
+void	last_cmd(char **av, t_cmd *cmd, int *fd, int *pfd)
+{
+	fd[1] = open(*(av + 3), O_RDWR | O_CREAT, 0666);
+	close(pfd[1]);
+	dup2(pfd[0], 0);
+	dup2(fd[1], 1);
+	execve(cmd->path, cmd->args, NULL);
+}
+
+void	mid_cmd(t_cmd *cmd)
+{
+	close(pfd);
+	dup2();
+	dup2();
+	execve();
+}
+void	first_cmd(char **av, t_cmd *cmd, int *fd, int *pfd)
+{
+	fd[0] = open(*av, O_RDONLY);
+	dup2 (fd[0], 0);
+	dup2 (pfd[1], 1);
+	execve (cmd->path, cmd->args, NULL);	
+}
 
 void preliminaries(int ac, char **av, char **envp)
 {
@@ -94,7 +142,6 @@ void preliminaries(int ac, char **av, char **envp)
 	int t = 0;
 	pid = (int *)malloc(sizeof(int) * n);
 	fd = (int *)malloc(sizeof(int) * 2);
-	for (int i = 0; i < n; i++)
 	cmd1 = (t_cmd *)malloc(sizeof(t_cmd));
 	cmd2 = (t_cmd *)malloc(sizeof(t_cmd));
 	i = 0;
@@ -103,16 +150,7 @@ void preliminaries(int ac, char **av, char **envp)
 		cmd1->path = *av;
 	else
 	{
-		while (envp && envp[i])
-		{
-			if (!ft_strncmp("PATH", envp[i], 4))
-				break;
-			i++;
-		}
-		paths = get_paths((envp[i]));
-		while (paths[j])
-			printf("==> %s\n", paths[j++]);
-		i = 1;
+		paths = get_paths((envp_path(envp)));
 		cmd1->args = get_args(*(av + 1));
 		cmd2->args = get_args(*(av + 2));
 		cmd1->path = extract_path(paths, cmd1);
@@ -121,16 +159,12 @@ void preliminaries(int ac, char **av, char **envp)
 		{
 			perror("Path not found\n");
 			free_arr(paths);
-			free_arr(cmd1->args);
-			free(cmd1);
-			free_arr(cmd2->args);
-			free(cmd2);
+			free_struct(cmd1);
+			free_struct(cmd2);
 			free(pid);
 			free(fd);
 			exit(1);
 		}
-		// while (t < n)
-		// {
 		pipe(pfd);
 		if (!(pid[t] = fork()))
 		{
@@ -140,8 +174,7 @@ void preliminaries(int ac, char **av, char **envp)
 			dup2(pfd[1], 1);
 			execve(cmd1->path, cmd1->args, NULL);
 		}
-		// waitpid(pid[t], NULL, 0);
-		// t++;
+		waitpid(pid[t++], NULL, 0);
 		if (!(pid[t] = fork()))
 		{
 			fd[1] = open(*(av + 3), O_RDWR | O_CREAT, 0666);
@@ -150,21 +183,14 @@ void preliminaries(int ac, char **av, char **envp)
 			dup2(fd[1], 1);
 			execve(cmd2->path, cmd2->args, NULL);
 		}
+		close (pfd[1]);
 		waitpid(-1, NULL, 0);
-		// t++;
+		close (pfd[0]);
 		free_arr(paths);
-		free_arr(cmd1->args);
-		free_arr(cmd2->args);
-		free(cmd1->path);
-		free(cmd2->path);
-		free(cmd1);
-		free(cmd2);
+		free_struct(cmd1);
+		free_struct(cmd2);
 		free(pid);
 		free(fd);
-		// break ;
-		// }
-		printf("----------------------------------------------------------------\n");
-		// i++;
 	}
 }
 
