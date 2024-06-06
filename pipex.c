@@ -6,13 +6,13 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 02:05:18 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/06/05 23:15:20 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/06/06 07:37:20 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "pipex.h"
 
-char **get_args(char *cmd)
+char	**get_args(char *cmd)
 {
 	char **args;
 
@@ -21,7 +21,7 @@ char **get_args(char *cmd)
 	return (args);
 }
 
-void free_arr(char **arr)
+void	free_arr(char **arr)
 {
 	int i;
 
@@ -31,7 +31,7 @@ void free_arr(char **arr)
 	free(arr);
 }
 
-char **get_paths(char *envp)
+char	**get_paths(char *envp)
 {
 	char **paths;
 
@@ -41,7 +41,7 @@ char **get_paths(char *envp)
 	return (paths);
 }
 
-char *extract_path(char **paths, t_cmd *cmd)
+char	*extract_path(char **paths, t_cmd *cmd)
 {
 	char *buffer;
 	int v;
@@ -69,12 +69,6 @@ char *extract_path(char **paths, t_cmd *cmd)
 	return (buffer);
 }
 
-
-
-// void	assignements()
-// {
-	
-// }
 
 char	*envp_path(char **envp)
 {
@@ -111,26 +105,67 @@ void	last_cmd(char **av, t_cmd *cmd, int *fd, int *pfd)
 	execve(cmd->path, cmd->args, NULL);
 }
 
-void	mid_cmd(t_cmd *cmd)
+void	mid_cmd(t_cmd *cmd, int *pfd)
 {
-	close(pfd);
-	dup2();
-	dup2();
-	execve();
+	// close(pfd);
+	dup2(pfd[0], 0);
+	dup2(pfd[1], 1);
+	execve(cmd->path, cmd->args, NULL);
 }
 void	first_cmd(char **av, t_cmd *cmd, int *fd, int *pfd)
 {
 	fd[0] = open(*av, O_RDONLY);
+	close(pfd[0]);
 	dup2 (fd[0], 0);
 	dup2 (pfd[1], 1);
 	execve (cmd->path, cmd->args, NULL);	
 }
 
-void preliminaries(int ac, char **av, char **envp)
+int	cmd_access(char *av)
+{
+	
+}
+
+t_cmd	*new_cmd(char *path, char **args)
+{
+	t_cmd	*new;
+
+	new = (t_cmd *) malloc (sizeof(t_cmd));
+	new->args = args;
+	new->path = path;
+	return (new);
+}
+
+t_cmd	*last_cmd(t_cmd *list)
+{
+	if (!list)
+		return (NULL);
+	while (list)
+	{
+		if (!list->next)
+			return (list);
+		list = list->next;
+	}
+}
+
+t_cmd	**cmd_list(char *av, t_cmd *new)
+{
+	t_cmd	**list;
+	t_data	*info;
+
+	new = (t_cmd *) malloc (sizeof(t_cmd));
+	new->path = extract_path(info->paths, new);
+	new->args = 
+	new->next = NULL;
+	if (!*list)
+		*list = new;
+	return (list);	
+}
+
+void	preliminaries(int ac, char **av, char **envp)
 {
 	int pfd[2];
 	char **paths;
-
 	t_cmd *cmd1;
 	t_cmd *cmd2;
 	int i;
@@ -193,12 +228,41 @@ void preliminaries(int ac, char **av, char **envp)
 		free(fd);
 	}
 }
+void	fill_list(char *av, )
+{
+	
+}
 
-int main(int ac, char **av, char **envp)
+void	pipex(int ac, char **av, char **envp)
+{
+	int	i;
+
+	i = 2;
+	while (i < ac - 1)
+	{
+		fill_list(*(av + i));
+		i++;
+	}
+}
+
+void	assignements(int ac, char **av, char **envp)
+{
+	t_data	*info;
+	info = (t_data*) malloc (sizeof(t_data));
+	if (!info)
+		return ;
+	info->paths = get_paths(envp_path(envp));
+	info->ac = ac;
+	info->av = av;
+	info->envp = envp;
+}
+
+int	main(int ac, char **av, char **envp)
 {
 	if (ac < 5)
 		return (1);
 	preliminaries(ac, av + 1, envp);
+	pipex(ac, av + 1, envp);
 	// parsing_();
 	return (0);
 }
