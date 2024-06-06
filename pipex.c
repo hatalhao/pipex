@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 02:05:18 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/06/06 07:37:20 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/06/06 08:00:59 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -148,18 +148,20 @@ t_cmd	*last_cmd(t_cmd *list)
 	}
 }
 
-t_cmd	**cmd_list(char *av, t_cmd *new)
+void	fill_list(t_cmd **list, t_data	*info)
 {
-	t_cmd	**list;
-	t_data	*info;
+	t_cmd *new;
 
 	new = (t_cmd *) malloc (sizeof(t_cmd));
+	if (!new)
+		return ;
 	new->path = extract_path(info->paths, new);
-	new->args = 
+	new->args = get_args (info->av);
 	new->next = NULL;
 	if (!*list)
 		*list = new;
-	return (list);	
+	else
+		(*list)->next = new;
 }
 
 void	preliminaries(int ac, char **av, char **envp)
@@ -228,26 +230,11 @@ void	preliminaries(int ac, char **av, char **envp)
 		free(fd);
 	}
 }
-void	fill_list(char *av, )
-{
-	
-}
 
-void	pipex(int ac, char **av, char **envp)
-{
-	int	i;
-
-	i = 2;
-	while (i < ac - 1)
-	{
-		fill_list(*(av + i));
-		i++;
-	}
-}
-
-void	assignements(int ac, char **av, char **envp)
+void	assignements(t_data *info, int ac, char **av, char **envp)
 {
 	t_data	*info;
+
 	info = (t_data*) malloc (sizeof(t_data));
 	if (!info)
 		return ;
@@ -257,12 +244,30 @@ void	assignements(int ac, char **av, char **envp)
 	info->envp = envp;
 }
 
+void	pipex(int ac, char **av, char **envp)
+{
+	int		i;
+	t_data	*info;
+	t_cmd	**list;
+	
+	list = (t_cmd **) malloc (sizeof(t_cmd));
+	if (!list)
+		exit(1);
+	assignements(info, ac, av, envp);
+	i = 2;
+	while (i < ac - 1)
+	{
+		fill_list(list, info);
+		i++;
+	}
+}
+
 int	main(int ac, char **av, char **envp)
 {
 	if (ac < 5)
 		return (1);
 	preliminaries(ac, av + 1, envp);
-	pipex(ac, av + 1, envp);
+	pipex(ac, av, envp);
 	// parsing_();
 	return (0);
 }
