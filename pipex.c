@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 02:05:18 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/06/06 08:00:59 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/06/09 21:14:59 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -107,7 +107,6 @@ void	last_cmd(char **av, t_cmd *cmd, int *fd, int *pfd)
 
 void	mid_cmd(t_cmd *cmd, int *pfd)
 {
-	// close(pfd);
 	dup2(pfd[0], 0);
 	dup2(pfd[1], 1);
 	execve(cmd->path, cmd->args, NULL);
@@ -121,10 +120,15 @@ void	first_cmd(char **av, t_cmd *cmd, int *fd, int *pfd)
 	execve (cmd->path, cmd->args, NULL);	
 }
 
-int	cmd_access(char *av)
-{
-	
-}
+// int	cmd_access(t_data *info, t_cmd *cmd)
+// {
+// 	int	v;
+
+// 	v = 0;
+// 	v = access(cmd->path, X_OK);
+// 	if (v == 0)
+// 		return ();
+// }
 
 t_cmd	*new_cmd(char *path, char **args)
 {
@@ -136,32 +140,38 @@ t_cmd	*new_cmd(char *path, char **args)
 	return (new);
 }
 
-t_cmd	*last_cmd(t_cmd *list)
+t_cmd	*last_node(t_cmd *list)
 {
 	if (!list)
 		return (NULL);
 	while (list)
 	{
 		if (!list->next)
-			return (list);
+			break ;
 		list = list->next;
 	}
+	return (list);
 }
 
-void	fill_list(t_cmd **list, t_data	*info)
+t_cmd	*mk_node(t_data *info, char *av)
 {
 	t_cmd *new;
 
 	new = (t_cmd *) malloc (sizeof(t_cmd));
 	if (!new)
-		return ;
+		return (NULL);
 	new->path = extract_path(info->paths, new);
-	new->args = get_args (info->av);
+	new->args = get_args (av);
 	new->next = NULL;
+	return (new);
+}
+
+void	add_to_list(t_cmd **list, t_cmd *new)
+{
 	if (!*list)
 		*list = new;
 	else
-		(*list)->next = new;
+		(last_node(*list))->next = new;
 }
 
 void	preliminaries(int ac, char **av, char **envp)
@@ -231,17 +241,16 @@ void	preliminaries(int ac, char **av, char **envp)
 	}
 }
 
-void	assignements(t_data *info, int ac, char **av, char **envp)
+t_data	*assignements(t_data *info, int ac, char **av, char **envp)
 {
-	t_data	*info;
-
 	info = (t_data*) malloc (sizeof(t_data));
 	if (!info)
-		return ;
+		return (NULL);
 	info->paths = get_paths(envp_path(envp));
 	info->ac = ac;
 	info->av = av;
 	info->envp = envp;
+	return (info);
 }
 
 void	pipex(int ac, char **av, char **envp)
@@ -249,15 +258,19 @@ void	pipex(int ac, char **av, char **envp)
 	int		i;
 	t_data	*info;
 	t_cmd	**list;
-	
+	t_cmd	*new;
+
+	info = NULL;
 	list = (t_cmd **) malloc (sizeof(t_cmd));
+	
 	if (!list)
 		exit(1);
-	assignements(info, ac, av, envp);
+	info = assignements(info, ac, av, envp);
 	i = 2;
 	while (i < ac - 1)
 	{
-		fill_list(list, info);
+		new = mk_node(info, info->av[i]);
+		add_to_list(list, new);
 		i++;
 	}
 }
@@ -266,7 +279,7 @@ int	main(int ac, char **av, char **envp)
 {
 	if (ac < 5)
 		return (1);
-	preliminaries(ac, av + 1, envp);
+	// preliminaries(ac, av + 1, envp);
 	pipex(ac, av, envp);
 	// parsing_();
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 01:49:04 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/06/06 07:29:21 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/06/09 00:12:39 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -31,7 +31,5 @@ typedef struct	s_data
 	char	**paths;
 	
 }				t_data;
-
-
 
 #endif

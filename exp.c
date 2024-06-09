@@ -30,8 +30,3 @@ void    ft_exp()
 	}
 }
 
-int main()
-{
-	ft_exp();
-	return (0);
-}
