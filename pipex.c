@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 02:05:18 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/06/09 21:14:59 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/06/09 21:37:50 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -160,18 +160,22 @@ t_cmd	*mk_node(t_data *info, char *av)
 	new = (t_cmd *) malloc (sizeof(t_cmd));
 	if (!new)
 		return (NULL);
-	new->path = extract_path(info->paths, new);
 	new->args = get_args (av);
+	new->path = extract_path(info->paths, new);
 	new->next = NULL;
 	return (new);
 }
 
 void	add_to_list(t_cmd **list, t_cmd *new)
 {
-	if (!*list)
+	t_cmd *last;
+	if (!list || !*list)
 		*list = new;
 	else
+	{
+		last = last_node(*list);
 		(last_node(*list))->next = new;
+	}
 }
 
 void	preliminaries(int ac, char **av, char **envp)
@@ -262,7 +266,7 @@ void	pipex(int ac, char **av, char **envp)
 
 	info = NULL;
 	list = (t_cmd **) malloc (sizeof(t_cmd));
-	
+	list = 0;
 	if (!list)
 		exit(1);
 	info = assignements(info, ac, av, envp);
