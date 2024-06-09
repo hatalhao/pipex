@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 01:49:04 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/06/09 00:12:39 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/06/09 23:55:40 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -29,7 +29,9 @@ typedef struct	s_data
 	char	**av;
 	char	**envp;
 	char	**paths;
-	
+	int		pid;
+	int		*fd;
+	int		*pfd;
 }				t_data;
 
 #endif

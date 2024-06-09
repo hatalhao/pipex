@@ -6,20 +6,11 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 02:05:18 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/06/09 22:52:54 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/06/09 23:10:11 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #include "pipex.h"
-
-char	**get_args(char *cmd)
-{
-	char **args;
-
-	args = NULL;
-	args = ft_split(cmd, ' ');
-	return (args);
-}
 
 void	free_arr(char **arr)
 {
@@ -29,6 +20,22 @@ void	free_arr(char **arr)
 	while (arr && arr[i])
 		free(arr[i++]);
 	free(arr);
+}
+
+void	free_struct(t_cmd *cmd)
+{
+	free_arr(cmd->args);
+	free(cmd->path);
+	free(cmd);
+}
+
+char	**get_args(char *cmd)
+{
+	char **args;
+
+	args = NULL;
+	args = ft_split(cmd, ' ');
+	return (args);
 }
 
 char	**get_paths(char *envp)
@@ -79,9 +86,7 @@ void	free_list(t_cmd **list)
 	{
 		tmp = iter;
 		iter = iter->next;
-		free (tmp->path);
-		free_arr (tmp->args);
-		free(tmp);
+		free_struct (tmp);
 	}
 	free (list);
 }
@@ -105,12 +110,6 @@ char	*envp_path(char **envp)
 	return (path);
 }
 
-void	free_struct(t_cmd *cmd)
-{
-	free_arr(cmd->args);
-	free(cmd->path);
-	free(cmd);
-}
 
 void	last_cmd(char **av, t_cmd *cmd, int *fd, int *pfd)
 {
@@ -278,7 +277,6 @@ void	pipex(int ac, char **av, char **envp)
 	int		i;
 	t_data	*info;
 	t_cmd	**list;
-	t_cmd	*new;
 
 	info = NULL;
 	list = (t_cmd **) malloc (sizeof(t_cmd));
@@ -288,11 +286,8 @@ void	pipex(int ac, char **av, char **envp)
 	info = assignements(info, ac, av, envp);
 	i = 2;
 	while (i < ac - 1)
-	{
-		new = mk_node(info, info->av[i]);
-		add_to_list(list, new);
-		i++;
-	}
+		add_to_list(list, mk_node(info, info->av[i++]));
+	executions();
 	free_list (list);
 	free_arr (info->paths);
 	free (info);
