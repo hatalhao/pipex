@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 02:05:18 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/06/09 21:37:50 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/06/09 22:52:54 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -69,6 +69,22 @@ char	*extract_path(char **paths, t_cmd *cmd)
 	return (buffer);
 }
 
+void	free_list(t_cmd **list)
+{
+	t_cmd	*iter;
+	t_cmd	*tmp;
+
+	iter = *list;
+	while (iter)
+	{
+		tmp = iter;
+		iter = iter->next;
+		free (tmp->path);
+		free_arr (tmp->args);
+		free(tmp);
+	}
+	free (list);
+}
 
 char	*envp_path(char **envp)
 {
@@ -266,9 +282,9 @@ void	pipex(int ac, char **av, char **envp)
 
 	info = NULL;
 	list = (t_cmd **) malloc (sizeof(t_cmd));
-	list = 0;
 	if (!list)
 		exit(1);
+	*list = 0;
 	info = assignements(info, ac, av, envp);
 	i = 2;
 	while (i < ac - 1)
@@ -277,6 +293,9 @@ void	pipex(int ac, char **av, char **envp)
 		add_to_list(list, new);
 		i++;
 	}
+	free_list (list);
+	free_arr (info->paths);
+	free (info);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -285,6 +304,5 @@ int	main(int ac, char **av, char **envp)
 		return (1);
 	// preliminaries(ac, av + 1, envp);
 	pipex(ac, av, envp);
-	// parsing_();
 	return (0);
 }
