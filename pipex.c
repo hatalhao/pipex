@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 02:05:18 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/06/10 07:15:13 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/06/10 08:33:35 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -105,11 +105,11 @@ t_data	*assignements(t_data *info, int ac, char **av, char **envp)
 	info = (t_data*) malloc (sizeof(t_data));
 	if (!info)
 		return (NULL);
+	info->fd = (int *) malloc (sizeof(int) * 2);
 	info->paths = get_paths(envp_path(envp));
 	info->ac = ac;
 	info->av = av;
 	info->envp = envp;
-	info->fd = (int *) malloc (sizeof(int) * 2);
 	return (info);
 }
 
@@ -129,6 +129,8 @@ void	pipex(int ac, char **av, char **envp)
 	while (i < ac - 1)
 		add_to_list(list, mk_node(info, info->av[i++]));
 	executions(list, info);
+	close(info->pfd[0]);
+	close(info->pfd[1]);
 	free_list (list);
 	free_arr (info->paths);
 	free (info->fd);

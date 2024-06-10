@@ -3,7 +3,8 @@
     "pipex.h": "c",
     "unistd.h": "c",
     "libft.h": "c",
-    "errno.h": "c"
+    "errno.h": "c",
+    "wait.h": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",

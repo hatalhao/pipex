@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 02:08:30 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/06/10 07:09:32 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/06/10 09:13:13 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -17,8 +17,9 @@ void	file_to_pipe(t_data *info, t_cmd *cmd)
 	pipe(info->pfd);
 	info->pid = fork();
 	if (!info->pid)
-		first_cmd(info->av, cmd, info->fd, info->pfd);
-	printf("HERE %s\n", __func__);
+		first_cmd(info->av, cmd, info);
+	// waitpid(info->pid, NULL, 0);
+	// info->pid++;
 }
 
 void	pipe_to_pipe(t_data *info, t_cmd *cmd)
@@ -26,7 +27,7 @@ void	pipe_to_pipe(t_data *info, t_cmd *cmd)
 	pipe(info->pfd);
 	info->pid = fork();
 	if (!info->pid)
-		mid_cmd(cmd, info->pfd);
+		mid_cmd(cmd, info);
 	printf("HERE %s\n", __func__);
 }
 
@@ -35,8 +36,10 @@ void	pipe_to_file(t_data *info, t_cmd *cmd)
 	pipe(info->pfd);
 	info->pid = fork();
 	if (!info->pid)
-		first_cmd(info->av, cmd, info->fd, info->pfd);
+		last_cmd(info->av, cmd, info);
 	printf("HERE %s\n", __func__);
+	// waitpid(info->pid, NULL, 0);
+	// info->pid++;
 }
 
 void	executions(t_cmd **list, t_data *info)
@@ -50,12 +53,15 @@ void	executions(t_cmd **list, t_data *info)
 	iter = *list;
 	while (iter)
 	{
+		printf("path -> %s\n", iter->path);
 		if (iter == head)
 			file_to_pipe (info, iter);
 		else if (iter == tail)
 			pipe_to_file(info, iter);
 		else
 			pipe_to_pipe (info, iter);
+		waitpid(info->pid, NULL, 0);
+		info->pid++;
 		iter = iter->next;
 	}
 }

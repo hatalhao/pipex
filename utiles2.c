@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 06:34:06 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/06/10 07:11:08 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/06/10 09:12:43 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -25,27 +25,27 @@ t_cmd	*last_node(t_cmd *list)
 	return (list);
 }
 
-void	last_cmd(char **av, t_cmd *cmd, int *fd, int *pfd)
+void	last_cmd(char **av, t_cmd *cmd, t_data *info)
 {
-	fd[1] = open(*(av + 3), O_RDWR | O_CREAT, 0666);
-	close(pfd[1]);
-	dup2(pfd[0], 0);
-	dup2(fd[1], 1);
+	info->fd[1] = open(*(av + info->ac - 1), O_RDWR | O_CREAT, 0666);
+	close(info->pfd[1]);
+	dup2(info->pfd[0], 0);
+	dup2(info->fd[1], 1);
 	execve(cmd->path, cmd->args, NULL);
 }
 
-void	mid_cmd(t_cmd *cmd, int *pfd)
+void	mid_cmd(t_cmd *cmd, t_data *info)
 {
-	dup2(pfd[0], 0);
-	dup2(pfd[1], 1);
+	dup2(info->pfd[0], 0);
+	dup2(info->pfd[1], 1);
 	execve(cmd->path, cmd->args, NULL);
 }
-void	first_cmd(char **av, t_cmd *cmd, int *fd, int *pfd)
+void	first_cmd(char **av, t_cmd *cmd, t_data *info)
 {
-	fd[0] = open(*av, O_RDONLY);
-	close(pfd[0]);
-	dup2 (fd[0], 0);
-	dup2 (pfd[1], 1);
+	info->fd[0] = open(*av, O_RDONLY);
+	close(info->pfd[0]);
+	dup2 (info->fd[0], 0);
+	dup2 (info->pfd[1], 1);
 	execve (cmd->path, cmd->args, NULL);	
 }
 
