@@ -1,9 +1,2 @@
-	-	What to Parse?
-		= Parse The First Command
-		-	How To Parse a cmd?
-			= Grammatically correct.
-			= Check its executable path accessibility and permissions.
-			= 
-	-	How To Execute A Command?
-	-	How To Pass The Output of the first cmd to the next
-
+- Fix the way a passes info to the next pipe.
+- 

@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 01:49:04 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/06/10 11:49:39 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/06/12 17:12:52 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -33,6 +33,13 @@ typedef struct	s_data
 	int		*fd;
 	int		pfd[2];
 }				t_data;
+
+/*			pipex.c			*/
+void	pipex(int ac, char **av, char **envp);
+t_data	*assignements(t_data *info, int ac, char **av, char **envp);
+void	add_to_list(t_cmd **list, t_cmd *new);
+// void	preliminaries(int ac, char **av, char **envp);
+
 
 /*			utiles.c		*/
 void	executions(t_cmd **list, t_data *info);

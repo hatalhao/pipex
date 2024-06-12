@@ -1,8 +1,0 @@
-     1	libft = libft.a
-    14	$(NAME): $(OBJ) $(libft)
-    15		$(CC) $(CFLAGS) $(OBJ) $(libft) -o $(NAME)
-    17	$(libft):
-    18		make -s -C libft
-    19		cd libft && mv libft.a ../
-    25		make -s -C libft clean
-    28		rm -rf $(NAME) $(libft)

@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 06:34:06 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/06/10 21:35:00 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/06/12 20:01:32 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -53,7 +53,7 @@ void	first_cmd(char **av, t_cmd *cmd, t_data *info)
 	close (info->fd[0]);
 	dup2 (info->pfd[1], 1);
 	// close (info->pfd[1]);
-	execve (cmd->path, cmd->args, NULL);	
+	execve (cmd->path, cmd->args, NULL);
 }
 
 t_cmd	*mk_node(t_data *info, char *av)

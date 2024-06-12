@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 06:56:47 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/06/10 06:57:48 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/06/12 19:11:24 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -41,7 +41,7 @@ char	*extract_path(char **paths, t_cmd *cmd)
 	buffer = NULL;
 	while (paths[i])
 	{
-		buffer = ft_join(ft_join(ft_duplicate(paths[i]), ft_duplicate("/")), ft_duplicate(*(cmd->args)));
+		buffer = ft_join(ft_join(ft_duplicate(paths[i++]), ft_duplicate("/")), ft_duplicate(*(cmd->args)));
 		v = access(buffer, X_OK);
 		if (!v)
 		{
@@ -49,7 +49,6 @@ char	*extract_path(char **paths, t_cmd *cmd)
 			break;
 		}
 		free(buffer);
-		i++;
 	}
 	if (v == -1)
 	{
