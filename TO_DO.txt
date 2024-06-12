@@ -7,7 +7,3 @@
 	-	How To Execute A Command?
 	-	How To Pass The Output of the first cmd to the next
 
-
-fork() will create a child process which will execute, using execve() and waitpid(),
-the first command and take its output, using dup2() and pipe(),
-and pipe it to a second process which is forked within the child; treating it as an input for the 2nd command using dup2() again.
