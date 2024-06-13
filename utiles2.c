@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 06:34:06 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/06/13 02:02:28 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/06/14 00:16:23 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -29,7 +29,6 @@ t_cmd	*last_node(t_cmd *list)
 
 void	first_cmd(char **av, t_cmd *cmd, t_data *info)
 {
-	fprintf(stderr, "****HERE\n");
 	info->fd[0] = open(*av, O_RDONLY);
 	dup2 (info->fd[0], 0);
 	close (info->fd[0]);
@@ -44,9 +43,6 @@ void	first_cmd(char **av, t_cmd *cmd, t_data *info)
 	close(info->pfd[0]);
 	execve (cmd->path, cmd->args, NULL);
 }
-
-
-
 
 
 void	mid_cmd(t_cmd *cmd, t_data *info)
