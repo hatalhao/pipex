@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 06:34:06 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/06/12 20:01:32 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/06/13 02:02:28 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -25,36 +25,54 @@ t_cmd	*last_node(t_cmd *list)
 	return (list);
 }
 
-void	last_cmd(char **av, t_cmd *cmd, t_data *info)
-{
-	// printf("HERE ==> %s\n", __func__);
-	info->fd[1] = open(*(av + info->ac - 1), O_RDWR | O_CREAT, 0666);
-	close(info->pfd[1]);
-	dup2(info->pfd[0], 0);
-	close(info->pfd[0]);
-	dup2(info->fd[1], 1);
-	execve(cmd->path, cmd->args, NULL);
-}
 
-void	mid_cmd(t_cmd *cmd, t_data *info)
-{
-	printf("---------> %d\n", info->pid);
-	dup2(info->pfd[0], 0);
-	close(info->pfd[0]);
-	dup2(info->pfd[1], 1);
-	close(info->pfd[1]);
-	execve(cmd->path, cmd->args, NULL);
-}
+
 void	first_cmd(char **av, t_cmd *cmd, t_data *info)
 {
+	fprintf(stderr, "****HERE\n");
 	info->fd[0] = open(*av, O_RDONLY);
-	close(info->pfd[0]);
 	dup2 (info->fd[0], 0);
 	close (info->fd[0]);
 	dup2 (info->pfd[1], 1);
-	// close (info->pfd[1]);
+	
+	// char *buffer;
+	// buffer = (char *) malloc (1000);
+	// buffer [999] = 0;
+	// fprintf(stderr, "===> %zd\n", read(0, buffer, 100));
+	// fprintf(stderr,"--> %s\n", buffer);
+	
+	close(info->pfd[0]);
 	execve (cmd->path, cmd->args, NULL);
 }
+
+
+
+
+
+void	mid_cmd(t_cmd *cmd, t_data *info)
+{
+	dup2(info->pfd[0], 0);
+	close(info->pfd[0]);
+	// dup2(info->pfd[1], 1);
+	close(info->pfd[1]);
+	execve(cmd->path, cmd->args, NULL);
+}
+
+
+
+
+void	last_cmd(t_cmd *cmd, t_data *info)
+{
+	close(info->pfd[1]);
+	dup2(info->pfd[0], 0);
+	dup2(info->fd[1], 1);
+	close(info->pfd[0]);
+	// close (info->fd[1]);
+	execve(cmd->path, cmd->args, NULL);
+}
+
+
+
 
 t_cmd	*mk_node(t_data *info, char *av)
 {

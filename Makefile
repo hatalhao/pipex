@@ -4,7 +4,7 @@ NAME = pipex
 
 CC = cc
 
-CFLAGS = -Werror -Wall -Wextra -g3 -fsanitize=address
+CFLAGS = -Werror -Wall -Wextra -g3 #-fsanitize=address
 
 #SRC = $(wildcard *.c)
 SRC = pipex.c utiles.c utiles2.c utiles3.c utiles4.c\

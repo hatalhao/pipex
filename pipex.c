@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 02:05:18 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/06/10 08:33:35 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/06/13 00:31:49 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -129,6 +129,7 @@ void	pipex(int ac, char **av, char **envp)
 	while (i < ac - 1)
 		add_to_list(list, mk_node(info, info->av[i++]));
 	executions(list, info);
+	wait(NULL);
 	close(info->pfd[0]);
 	close(info->pfd[1]);
 	free_list (list);
@@ -143,5 +144,8 @@ int	main(int ac, char **av, char **envp)
 		return (1);
 	// preliminaries(ac, av + 1, envp);
 	pipex(ac, av, envp);
+	// sleep (100);
+	// fprintf(stderr ,"dd\n");
+	printf("dd\n");
 	return (0);
 }
