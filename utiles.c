@@ -14,10 +14,12 @@
 
 void	file_to_pipe(t_data *info, t_cmd *cmd)
 {
+
 	pipe(info->pfd);
 	info->pid = fork();
 	if (!info->pid)
 	{
+		// printf("file to pipe =======> %d\n", info->pid);
 		first_cmd(info->av, cmd, info);
 		// waitpid(info->pid, NULL, 0);
 		exit(0);
@@ -34,12 +36,12 @@ void	pipe_to_pipe(t_data *info, t_cmd *cmd)
 	info->pid = fork();
 	if (!info->pid)
 	{
+		// printf("pipe to pipe =======> %d\n", info->pid);
 		mid_cmd(cmd, info);
 		// waitpid(info->pid, NULL, 0);
-		exit(0);
+		// exit(0);
 	}
-		waitpid(info->pid, NULL, 0);
-	
+	// waitpid(info->pid, NULL, 0);
 	
 	
 	close(info->pfd[0]);
@@ -49,15 +51,21 @@ void	pipe_to_pipe(t_data *info, t_cmd *cmd)
 void	pipe_to_file(t_data *info, t_cmd *cmd)
 {
 	// info->fd[1] = open(info->av[info->ac - 1], O_TRUNC | O_RDWR | O_CREAT , 0666);
-	info->fd[1] = open(info->av[info->ac - 1], O_CREAT | O_RDWR, 0666);
+	info->fd[1] = open(info->av[info->ac - 1], O_CREAT | O_TRUNC | O_RDWR, 0666);
+	if (info->fd[1] == -1)
+	{
+		perror("Open Failed\n");
+		return ;
+	}
 	pipe(info->pfd);
 	info->pid = fork();
 	if (!info->pid)
 	{
+		// printf("pipe to file =======> %d\n", info->pid);
 		last_cmd(cmd, info);
 		// waitpid(info->pid, NULL, 0);
 	}
-	
+
 	// char *buffer;
 	// buffer = (char *) malloc (1000);
 	// buffer [999] = 0;
@@ -69,6 +77,7 @@ void	pipe_to_file(t_data *info, t_cmd *cmd)
 	
 	close(info->pfd[0]);
 	close (info->pfd[1]);
+	close (info->fd[1]);
 }
 
 void	executions(t_cmd **list, t_data *info)

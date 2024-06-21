@@ -25,13 +25,6 @@
 // }
 
 
-void	add_to_list(t_cmd **list, t_cmd *new)
-{
-	if (!list || !*list)
-		*list = new;
-	else
-		(last_node(*list))->next = new;
-}
 
 // void	preliminaries(int ac, char **av, char **envp)
 // {
@@ -100,12 +93,22 @@ void	add_to_list(t_cmd **list, t_cmd *new)
 // 	}
 // }
 
+void	add_to_list(t_cmd **list, t_cmd *new)
+{
+	if (!list || !*list)
+		*list = new;
+	else
+		(last_node(*list))->next = new;
+}
+
 t_data	*assignements(t_data *info, int ac, char **av, char **envp)
 {
 	info = (t_data*) malloc (sizeof(t_data));
 	if (!info)
 		return (NULL);
 	info->fd = (int *) malloc (sizeof(int) * 2);
+	if (!info->fd)
+		return (NULL);
 	info->paths = get_paths(envp_path(envp));
 	info->ac = ac;
 	info->av = av;
@@ -125,6 +128,11 @@ void	pipex(int ac, char **av, char **envp)
 		exit(1);
 	*list = 0;
 	info = assignements(info, ac, av, envp);
+	if (!info)
+	{
+		free (list);
+		exit (1);
+	}
 	i = 2;
 	while (i < ac - 1)
 		add_to_list(list, mk_node(info, info->av[i++]));

@@ -29,28 +29,43 @@ t_cmd	*last_node(t_cmd *list)
 
 void	first_cmd(char **av, t_cmd *cmd, t_data *info)
 {
-	info->fd[0] = open(*av, O_RDONLY);
-	dup2 (info->fd[0], 0);
+	info->fd[0] = open(*(av + 1), O_RDONLY);
+	if (info->fd[0] == -1)
+	{
+		perror("Open Failed\n");
+		return ;
+	}
+	if (dup2 (info->fd[0], 0) == -1)
+	{
+		perror("DUP2 FAILED\n");
+		return ;
+	}
 	close (info->fd[0]);
-	dup2 (info->pfd[1], 1);
-	
+	close(info->pfd[0]);
+	if (dup2 (info->pfd[1], 1) == -1)
+	{
+		perror("DUP2 FAILED\n");
+		return ;
+	}
 	// char *buffer;
 	// buffer = (char *) malloc (1000);
 	// buffer [999] = 0;
 	// fprintf(stderr, "===> %zd\n", read(0, buffer, 100));
 	// fprintf(stderr,"--> %s\n", buffer);
-	
-	close(info->pfd[0]);
 	execve (cmd->path, cmd->args, NULL);
 }
 
 
 void	mid_cmd(t_cmd *cmd, t_data *info)
 {
-	dup2(info->pfd[0], 0);
+	if (dup2 (info->pfd[0], 0) == -1)
+	{
+		perror("DUP2 FAILED\n");
+		return ;
+	}
 	close(info->pfd[0]);
-	// dup2(info->pfd[1], 1);
 	close(info->pfd[1]);
+	// dup2(info->pfd[1], 1);
 	execve(cmd->path, cmd->args, NULL);
 }
 
@@ -60,8 +75,17 @@ void	mid_cmd(t_cmd *cmd, t_data *info)
 void	last_cmd(t_cmd *cmd, t_data *info)
 {
 	close(info->pfd[1]);
-	dup2(info->pfd[0], 0);
-	dup2(info->fd[1], 1);
+	if (dup2 (info->pfd[0], 0) == -1)
+	{
+		perror("DUP2 FAILED\n");
+		return ;
+	}
+	close (info->pfd[0]);
+	if (dup2 (info->fd[1], 1) == -1)
+	{
+		perror("DUP2 FAILED\n");
+		return ;
+	}
 	close(info->pfd[0]);
 	// close (info->fd[1]);
 	execve(cmd->path, cmd->args, NULL);
