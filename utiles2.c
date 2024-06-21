@@ -25,8 +25,6 @@ t_cmd	*last_node(t_cmd *list)
 	return (list);
 }
 
-
-
 void	first_cmd(char **av, t_cmd *cmd, t_data *info)
 {
 	info->fd[0] = open(*(av + 1), O_RDONLY);
@@ -47,6 +45,7 @@ void	first_cmd(char **av, t_cmd *cmd, t_data *info)
 		perror("DUP2 FAILED\n");
 		return ;
 	}
+	fprintf(stderr, "HERE\n");
 	// char *buffer;
 	// buffer = (char *) malloc (1000);
 	// buffer [999] = 0;
@@ -64,13 +63,15 @@ void	mid_cmd(t_cmd *cmd, t_data *info)
 		return ;
 	}
 	close(info->pfd[0]);
+	if (dup2(info->pfd[1], 1) == -1)
+	{
+		perror("DUP2 FAILED\n");
+		return ;
+	}
 	close(info->pfd[1]);
-	// dup2(info->pfd[1], 1);
+	fprintf(stderr, "----------------- II ---------------\n");
 	execve(cmd->path, cmd->args, NULL);
 }
-
-
-
 
 void	last_cmd(t_cmd *cmd, t_data *info)
 {
@@ -86,13 +87,10 @@ void	last_cmd(t_cmd *cmd, t_data *info)
 		perror("DUP2 FAILED\n");
 		return ;
 	}
-	close(info->pfd[0]);
+	close(info->pfd[1]);
 	// close (info->fd[1]);
 	execve(cmd->path, cmd->args, NULL);
 }
-
-
-
 
 t_cmd	*mk_node(t_data *info, char *av)
 {

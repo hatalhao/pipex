@@ -137,7 +137,7 @@ void	pipex(int ac, char **av, char **envp)
 	while (i < ac - 1)
 		add_to_list(list, mk_node(info, info->av[i++]));
 	executions(list, info);
-	wait(NULL);
+	// waitpid(0, NULL, 0);
 	close(info->pfd[0]);
 	close(info->pfd[1]);
 	free_list (list);

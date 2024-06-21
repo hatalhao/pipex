@@ -14,6 +14,7 @@
 
 void	file_to_pipe(t_data *info, t_cmd *cmd)
 {
+	// int	pid;
 
 	pipe(info->pfd);
 	info->pid = fork();
@@ -24,14 +25,16 @@ void	file_to_pipe(t_data *info, t_cmd *cmd)
 	}
 	if (!info->pid)
 	{
-		// printf("file to pipe =======> %d\n", info->pid);
 		first_cmd(info->av, cmd, info);
-		// waitpid(info->pid, NULL, 0);
 		exit(0);
 	}
-	
-	close(info->pfd[0]);
-	close(info->pfd[1]);
+	else
+	{
+		fprintf(stderr, "--------------------------\n");
+		waitpid(info->pid, NULL, 0);
+		close(info->pfd[0]);
+		close(info->pfd[1]);
+	}
 }
 
 void	pipe_to_pipe(t_data *info, t_cmd *cmd)
@@ -45,16 +48,17 @@ void	pipe_to_pipe(t_data *info, t_cmd *cmd)
 	}
 	if (!info->pid)
 	{
-		// printf("pipe to pipe =======> %d\n", info->pid);
 		mid_cmd(cmd, info);
-		// waitpid(info->pid, NULL, 0);
+		fprintf(stderr, "----------------- 12 ---------------\n");
 		exit(0);
 	}
-	// waitpid(0, NULL, 0);
-
-
-	close(info->pfd[0]);
-	close(info->pfd[1]);
+	else
+	{
+		fprintf(stderr, "--------------------------\n");
+		waitpid(info->pid, NULL, 0);
+		close(info->pfd[0]);
+		close(info->pfd[1]);
+	}
 }
 
 void	pipe_to_file(t_data *info, t_cmd *cmd)
@@ -80,7 +84,13 @@ void	pipe_to_file(t_data *info, t_cmd *cmd)
 		// waitpid(info->pid, NULL, 0);
 		exit(0);
 	}
-
+	else
+	{
+		waitpid(info->pid, NULL, 0);
+		close(info->pfd[0]);
+		close (info->pfd[1]);
+		close (info->fd[1]);
+	}
 	// char *buffer;
 	// buffer = (char *) malloc (1000);
 	// buffer [999] = 0;
@@ -90,9 +100,6 @@ void	pipe_to_file(t_data *info, t_cmd *cmd)
 	// fprintf(stderr,"--> %c\n", buffer[0]);
 	// free (buffer);
 	
-	close(info->pfd[0]);
-	close (info->pfd[1]);
-	close (info->fd[1]);
 }
 
 void	executions(t_cmd **list, t_data *info)
