@@ -123,7 +123,7 @@ void	pipex(int ac, char **av, char **envp)
 	t_cmd	**list;
 
 	info = NULL;
-	list = (t_cmd **) malloc (sizeof(t_cmd));
+	list = (t_cmd **) malloc (sizeof(t_cmd *));
 	if (!list)
 		exit(1);
 	*list = 0;

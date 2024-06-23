@@ -40,11 +40,12 @@ void	first_cmd(char **av, t_cmd *cmd, t_data *info)
 	}
 	close (info->fd[0]);
 	close(info->pfd[0]);
-	if (dup2 (info->pfd[1], 1) == -1)
+	if (dup2(info->pfd[1], 1) == -1)
 	{
 		perror("DUP2 FAILED\n");
 		return ;
 	}
+	close(info->pfd[1]);
 	fprintf(stderr, "HERE\n");
 	// char *buffer;
 	// buffer = (char *) malloc (1000);
@@ -57,7 +58,7 @@ void	first_cmd(char **av, t_cmd *cmd, t_data *info)
 
 void	mid_cmd(t_cmd *cmd, t_data *info)
 {
-	if (dup2 (info->pfd[0], 0) == -1)
+	if (dup2(info->pfd[0], 0) == -1)
 	{
 		perror("DUP2 FAILED\n");
 		return ;
@@ -70,7 +71,11 @@ void	mid_cmd(t_cmd *cmd, t_data *info)
 	}
 	close(info->pfd[1]);
 	fprintf(stderr, "----------------- II ---------------\n");
-	execve(cmd->path, cmd->args, NULL);
+	if (execve(cmd->path, cmd->args, NULL) == -1)
+	{
+		perror("EXECVE FAILED\n");
+		exit (1);
+	}
 }
 
 void	last_cmd(t_cmd *cmd, t_data *info)
@@ -87,8 +92,7 @@ void	last_cmd(t_cmd *cmd, t_data *info)
 		perror("DUP2 FAILED\n");
 		return ;
 	}
-	close(info->pfd[1]);
-	// close (info->fd[1]);
+	close (info->fd[1]);
 	execve(cmd->path, cmd->args, NULL);
 }
 
