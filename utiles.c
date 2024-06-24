@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 02:08:30 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/06/13 02:01:01 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/06/24 17:28:18 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -33,7 +33,6 @@ void	file_to_pipe(t_data *info, t_cmd *cmd)
 	else
 	{
 		fprintf(stderr, "--------------------------\n");
-		waitpid(info->pid, NULL, 0);
 		close(info->pfd[0]);
 		close(info->pfd[1]);
 	}
@@ -61,14 +60,20 @@ void	pipe_to_pipe(t_data *info, t_cmd *cmd)
 	else
 	{
 		fprintf(stderr, "--------------------------------------\n");
-		waitpid(info->pid, NULL, 0);
 		close(info->pfd[0]);
 		close(info->pfd[1]);
+		// waitpid(info->pid, NULL, 0);
+		// wait(NULL);
 	}
 }
 
 void	pipe_to_file(t_data *info, t_cmd *cmd)
 {
+	// char *buffer;
+	// buffer = (char *) malloc (1000);
+	// buffer [999] = 0;
+	// fprintf(stderr, "===> %zd\n", read(info->pfd[0], buffer, 10));
+	// fprintf(stderr,"--> %s\n", buffer);
 	info->fd[1] = open(info->av[info->ac - 1], O_CREAT | O_TRUNC | O_RDWR, 0666);
 	if (info->fd[1] == -1)
 	{
@@ -94,10 +99,11 @@ void	pipe_to_file(t_data *info, t_cmd *cmd)
 	}
 	else
 	{
-		waitpid(info->pid, NULL, 0);
 		close(info->pfd[0]);
 		close (info->pfd[1]);
 		close (info->fd[1]);
+		// wait(NULL);
+		// waitpid(info->pid, NULL, 0);
 	}
 
 	// char *buffer;
@@ -116,12 +122,18 @@ void	executions(t_cmd **list, t_data *info)
 	t_cmd	*head;
 	t_cmd	*tail;
 	t_cmd	*iter;
+	int		pfd2[2];
 
 	head = *list;
 	tail = last_node(*list);
 	iter = *list;
 	while (iter)
 	{
+		if (pipe(pfd2) == -1)
+		{
+			perror ("Pipe in executions failed\n");
+			return ;
+		}
 		fprintf(stderr, "path -> %s\n", iter->path);
 		if (iter == head)
 			file_to_pipe(info, iter);

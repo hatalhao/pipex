@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 06:34:06 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/06/14 00:16:23 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/06/24 16:57:08 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -38,31 +38,43 @@ void	first_cmd(char **av, t_cmd *cmd, t_data *info)
 		perror("DUP2 FAILED\n");
 		return ;
 	}
-	close (info->fd[0]);
-	close(info->pfd[0]);
 	if (dup2(info->pfd[1], 1) == -1)
 	{
 		perror("DUP2 FAILED\n");
 		return ;
 	}
+	close (info->fd[0]);
+	close(info->pfd[0]);
 	close(info->pfd[1]);
 	fprintf(stderr, "HERE\n");
 	// char *buffer;
 	// buffer = (char *) malloc (1000);
 	// buffer [999] = 0;
-	// fprintf(stderr, "===> %zd\n", read(0, buffer, 100));
-	// fprintf(stderr,"--> %s\n", buffer);
+	// fprintf(stderr, "--- first command ===> %zd\n", read(0, buffer, 200));
+	// fprintf(stderr, "--> %s\n", buffer);
 	execve (cmd->path, cmd->args, NULL);
 }
 
 
 void	mid_cmd(t_cmd *cmd, t_data *info)
 {
+	fprintf(stdout,"--> HERE <--\n");
+	// char *buffer;
+	// buffer = (char *) malloc (1000);
+	// buffer [999] = 0;
+	// fprintf(stderr, "===> %zd\n", read(0, buffer, 200));
+	// fprintf(stderr,"--> %s\n", buffer);
 	if (dup2(info->pfd[0], 0) == -1)
 	{
 		perror("DUP2 FAILED\n");
 		return ;
 	}
+	fprintf(stderr, "----------------- II ---------------\n");
+	// char *buffer;
+	// buffer = (char *) malloc (1000);
+	// buffer [999] = 0;
+	// fprintf(stderr, "===> %zd\n", read(0, buffer, 200));
+	// fprintf(stderr,"--> %s\n", buffer);
 	close(info->pfd[0]);
 	if (dup2(info->pfd[1], 1) == -1)
 	{
@@ -70,7 +82,6 @@ void	mid_cmd(t_cmd *cmd, t_data *info)
 		return ;
 	}
 	close(info->pfd[1]);
-	fprintf(stderr, "----------------- II ---------------\n");
 	if (execve(cmd->path, cmd->args, NULL) == -1)
 	{
 		perror("EXECVE FAILED\n");
@@ -80,6 +91,12 @@ void	mid_cmd(t_cmd *cmd, t_data *info)
 
 void	last_cmd(t_cmd *cmd, t_data *info)
 {
+	fprintf(stderr, "----------------- I2 ---------------\n");
+	// char *buffer;
+	// buffer = (char *) malloc (1000);
+	// buffer [999] = 0;
+	// fprintf(stderr, "===> %zd\n", read(0, buffer, 1));
+	// fprintf(stderr,"--> %s\n", buffer);
 	close(info->pfd[1]);
 	if (dup2 (info->pfd[0], 0) == -1)
 	{
