@@ -1,20 +1,20 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   utiles.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hamza <hamza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 02:08:30 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/06/24 17:28:18 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/07/12 09:54:12 by hamza            ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "pipex.h"
 
 void	file_to_pipe(t_data *info, t_cmd *cmd)
 {
-	if (pipe(info->pfd) == -1)
+	if (pipe(info->pipefd) == -1)
 	{
 		perror("PIPE FAILED\n");
 		return ;
@@ -28,29 +28,35 @@ void	file_to_pipe(t_data *info, t_cmd *cmd)
 	if (!info->pid)
 	{
 		first_cmd(info->av, cmd, info);
+		
 		exit(0);
 	}
 	else
 	{
 		fprintf(stderr, "--------------------------\n");
-		close(info->pfd[0]);
-		close(info->pfd[1]);
+		if (dup2(info->pipefd[0], info->keeper) == -1)
+			return (perror("dup2 in file_to_pipe failed\n"));
+		close(info->pipefd[0]);
+		close(info->pipefd[1]);
 	}
 }
 
 void	pipe_to_pipe(t_data *info, t_cmd *cmd)
 {
-	if (pipe(info->pfd) == -1)
+	if (pipe(info->pipefd) == -1)
 	{
 		perror("PIPE FAILED\n");
 		return ;
 	}
+	if (dup2(info->keeper, info->pipefd[0]) == -1)
+		return (perror("dup2 in file_to_pipe failed\n"));
+	
+	
+	close (info->keeper);
 	info->pid = fork();
 	if (info->pid == -1)
-	{
-		perror ("FORK FAILED\n");
-		return ;
-	}
+		return (perror ("FORK FAILED\n"));
+	
 	if (!info->pid)
 	{
 		mid_cmd(cmd, info);
@@ -60,8 +66,8 @@ void	pipe_to_pipe(t_data *info, t_cmd *cmd)
 	else
 	{
 		fprintf(stderr, "--------------------------------------\n");
-		close(info->pfd[0]);
-		close(info->pfd[1]);
+		close(info->pipefd[0]);
+		close(info->pipefd[1]);
 		// waitpid(info->pid, NULL, 0);
 		// wait(NULL);
 	}
@@ -69,28 +75,14 @@ void	pipe_to_pipe(t_data *info, t_cmd *cmd)
 
 void	pipe_to_file(t_data *info, t_cmd *cmd)
 {
-	// char *buffer;
-	// buffer = (char *) malloc (1000);
-	// buffer [999] = 0;
-	// fprintf(stderr, "===> %zd\n", read(info->pfd[0], buffer, 10));
-	// fprintf(stderr,"--> %s\n", buffer);
 	info->fd[1] = open(info->av[info->ac - 1], O_CREAT | O_TRUNC | O_RDWR, 0666);
 	if (info->fd[1] == -1)
-	{
-		perror("Open Failed\n");
-		return ;
-	}
-	if (pipe(info->pfd) == -1)
-	{
-		perror("PIPE FAILED\n");
-		return ;
-	}
+		return (perror("Open Failed\n"));
+	if (pipe(info->pipefd) == -1)
+		return (perror("PIPE FAILED\n"));
 	info->pid = fork();
 	if (info->pid == -1)
-	{
-		perror("FORK FAILED\n");
-		return ;
-	}
+		return (perror("FORK FAILED\n"));
 	if (!info->pid)
 	{
 		last_cmd(cmd, info);
@@ -99,8 +91,8 @@ void	pipe_to_file(t_data *info, t_cmd *cmd)
 	}
 	else
 	{
-		close(info->pfd[0]);
-		close (info->pfd[1]);
+		close(info->pipefd[0]);
+		close (info->pipefd[1]);
 		close (info->fd[1]);
 		// wait(NULL);
 		// waitpid(info->pid, NULL, 0);
@@ -122,18 +114,17 @@ void	executions(t_cmd **list, t_data *info)
 	t_cmd	*head;
 	t_cmd	*tail;
 	t_cmd	*iter;
-	int		pfd2[2];
 
 	head = *list;
 	tail = last_node(*list);
 	iter = *list;
 	while (iter)
 	{
-		if (pipe(pfd2) == -1)
-		{
-			perror ("Pipe in executions failed\n");
-			return ;
-		}
+		// if (pipe(pipefd2) == -1)
+		// {
+		// 	perror ("Pipe in executions failed\n");
+		// 	return ;
+		// }
 		fprintf(stderr, "path -> %s\n", iter->path);
 		if (iter == head)
 			file_to_pipe(info, iter);
@@ -143,4 +134,36 @@ void	executions(t_cmd **list, t_data *info)
 			pipe_to_pipe(info, iter);
 		iter = iter->next;
 	}
+}
+
+void	pipe_fork(t_cmd **list, t_data *info)
+{
+	t_cmd	*head;
+	t_cmd	*tail;
+	t_cmd	*iter;
+	int		keeper;
+
+	keeper = open(info->av[1], O_RDONLY);
+	head = *list;
+	tail = last_node(*list);
+	iter = *list;
+	while (iter)
+	{
+		if (pipe(info->pipefd) == -1)
+		{
+			perror ("Pipe in pipe_fork() failed\n");
+			return ;
+		}
+		if (iter == head){
+			dup2(keeper, info->pipefd[0]);
+			close (keeper);
+		}
+		else
+			dup2(keeper, info->pipefd[0]);
+		if (iter == tail){
+			dup2(keeper, info->pipefd[0]);
+			break ;
+		}
+		iter = iter->next;
+	}	
 }
