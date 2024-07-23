@@ -92,6 +92,7 @@
 // 		free(fd);
 // 	}
 // }
+
 /*		This function adds a node to a linked list		*/
 void	add_to_list(t_cmd **list, t_cmd *new)
 {
@@ -109,6 +110,10 @@ t_data	*assignements(t_data *info, int ac, char **av, char **envp)
 		return (NULL);
 	info->fd = (int *) malloc (sizeof(int) * 2);
 	if (!info->fd)
+		return (NULL);
+	info->fd[0] = open(av[1], O_RDONLY);
+	info->fd[1] = open(av[ac - 1], O_RDWR | O_CREAT | O_TRUNC, 0666);
+	if (info->fd[0] == -1 || info->fd[1] == -1)
 		return (NULL);
 	info->paths = get_paths(envp_path(envp));
 	info->ac = ac;
@@ -136,7 +141,7 @@ void	pipex(int ac, char **av, char **envp)
 	}
 	i = 2;
 	while (i < ac - 1)
-		add_to_list(list, mk_node(info, info->av[i++]));
+		add_to_list(list, make_node(info, info->av[i++]));
 	executions(list, info);
 	close(info->pipefd[0]);
 	close(info->pipefd[1]);

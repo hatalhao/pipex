@@ -25,19 +25,10 @@ t_cmd	*last_node(t_cmd *list)
 	return (list);
 }
 
-void	first_cmd(char **av, t_cmd *cmd, t_data *info)
+void	first_cmd(t_cmd *cmd, t_data *info)
 {
-	info->fd[0] = open(*(av + 1), O_RDONLY);
-	if (info->fd[0] == -1)
-	{
-		perror("Open Failed\n");
-		return ;
-	}
 	if (dup2 (info->fd[0], 0) == -1 || dup2(info->pipefd[1], 1) == -1)
-	{
-		perror("DUP2 FAILED\n");
-		return ;
-	}
+		return (perror("DUP2 FAILED\n"));
 	close (info->fd[0]);
 	close(info->pipefd[0]);
 	close(info->pipefd[1]);
@@ -75,10 +66,7 @@ void	last_cmd(t_cmd *cmd, t_data *info)
 	fprintf(stderr, "----------------- I2 ---------------\n");
 	close(info->pipefd[1]);
 	if (dup2 (info->pipefd[0], 0) == -1)
-	{
-		perror("DUP2 FAILED\n");
-		return ;
-	}
+		return (perror("DUP2 FAILED\n"));
 	close (info->pipefd[0]);
 	if (dup2 (info->fd[1], 1) == -1)
 		return (perror("DUP2 FAILED\n"));
@@ -86,7 +74,7 @@ void	last_cmd(t_cmd *cmd, t_data *info)
 	execve(cmd->path, cmd->args, NULL);
 }
 
-t_cmd	*mk_node(t_data *info, char *av)
+t_cmd	*make_node(t_data *info, char *av)
 {
 	t_cmd *new;
 

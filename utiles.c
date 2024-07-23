@@ -15,20 +15,13 @@
 void	file_to_pipe(t_data *info, t_cmd *cmd)
 {
 	if (pipe(info->pipefd) == -1)
-	{
-		perror("PIPE FAILED\n");
-		return ;
-	}
+		return (perror("PIPE FAILED\n"));
 	info->pid = fork();
 	if (info->pid == -1)
-	{
-		perror("FORK FAILED\n");
-		return ;
-	}
+		return perror("FORK FAILED\n");
 	if (!info->pid)
 	{
-		first_cmd(info->av, cmd, info);
-		
+		first_cmd(cmd, info);
 		exit(0);
 	}
 	else
@@ -44,13 +37,9 @@ void	file_to_pipe(t_data *info, t_cmd *cmd)
 void	pipe_to_pipe(t_data *info, t_cmd *cmd)
 {
 	if (pipe(info->pipefd) == -1)
-	{
-		perror("PIPE FAILED\n");
-		return ;
-	}
+		return perror("PIPE FAILED\n");
 	if (dup2(info->keeper, info->pipefd[0]) == -1)
 		return (perror("dup2 in file_to_pipe failed\n"));
-	
 	
 	close (info->keeper);
 	info->pid = fork();
@@ -68,16 +57,11 @@ void	pipe_to_pipe(t_data *info, t_cmd *cmd)
 		fprintf(stderr, "--------------------------------------\n");
 		close(info->pipefd[0]);
 		close(info->pipefd[1]);
-		// waitpid(info->pid, NULL, 0);
-		// wait(NULL);
 	}
 }
 
 void	pipe_to_file(t_data *info, t_cmd *cmd)
 {
-	info->fd[1] = open(info->av[info->ac - 1], O_CREAT | O_TRUNC | O_RDWR, 0666);
-	if (info->fd[1] == -1)
-		return (perror("Open Failed\n"));
 	if (pipe(info->pipefd) == -1)
 		return (perror("PIPE FAILED\n"));
 	info->pid = fork();
@@ -111,11 +95,9 @@ void	pipe_to_file(t_data *info, t_cmd *cmd)
 
 void	executions(t_cmd **list, t_data *info)
 {
-	t_cmd	*head;
 	t_cmd	*tail;
 	t_cmd	*iter;
 
-	head = *list;
 	tail = last_node(*list);
 	iter = *list;
 	while (iter)
@@ -126,7 +108,7 @@ void	executions(t_cmd **list, t_data *info)
 		// 	return ;
 		// }
 		fprintf(stderr, "path -> %s\n", iter->path);
-		if (iter == head)
+		if (iter == *list)
 			file_to_pipe(info, iter);
 		else if (iter == tail)
 			pipe_to_file(info, iter);
@@ -138,32 +120,33 @@ void	executions(t_cmd **list, t_data *info)
 
 void	pipe_fork(t_cmd **list, t_data *info)
 {
-	t_cmd	*head;
 	t_cmd	*tail;
 	t_cmd	*iter;
 	int		keeper;
 
-	keeper = open(info->av[1], O_RDONLY);
-	head = *list;
+	keeper = info->fd[0];
 	tail = last_node(*list);
 	iter = *list;
 	while (iter)
 	{
+		fprintf(stderr,"--==--\n");
 		if (pipe(info->pipefd) == -1)
-		{
-			perror ("Pipe in pipe_fork() failed\n");
-			return ;
-		}
-		if (iter == head){
-			dup2(keeper, info->pipefd[0]);
+			return perror ("Pipe in pipe_fork() failed\n");
+		if (iter == *list){
+			dup2(keeper, 0);
 			close (keeper);
 		}
-		else
-			dup2(keeper, info->pipefd[0]);
-		if (iter == tail){
+		else if (iter == tail){
 			dup2(keeper, info->pipefd[0]);
 			break ;
 		}
+		else {
+			dup2(keeper, info->pipefd[0]);
+			close (keeper);
+		}
+		dup2 (info->pipefd[0], keeper);
+		close (info->pipefd[0]);
+		close (info->pipefd[1]);
 		iter = iter->next;
-	}	
+	}
 }

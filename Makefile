@@ -12,11 +12,11 @@ SRC = pipex.c utiles.c utiles2.c utiles3.c utiles4.c\
 OBJ = $(SRC:.c=.o)
 
 $(NAME): $(OBJ) $(libft)
-	$(CC) $(CFLAGS) $(OBJ) $(libft) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) $(libft) -o $(NAME)
 
 $(libft):
 	make -s -C libft
-	cd libft && mv libft.a ../
+	@cd libft && mv libft.a ../
 
 all: $(NAME)
 
