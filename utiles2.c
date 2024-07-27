@@ -6,7 +6,7 @@
 /*   By: hamza <hamza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 06:34:06 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/07/27 00:39:59 by hamza            ###   ########.fr       */
+/*   Updated: 2024/07/27 06:43:59 by hamza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,21 +32,12 @@ void	first_cmd(t_cmd *cmd, t_data *info)
 	close (info->fd[0]);
 	close(info->pipefd[0]);
 	close(info->pipefd[1]);
-	fprintf(stderr, "--> HERE\n");
 	execve (cmd->path, cmd->args, NULL);
 }
 
 
 void	mid_cmd(t_cmd *cmd, t_data *info)
 {
-	fprintf(stdout,"--> HERE <--\n");
-	// char *buffer;
-	// buffer = (char *) malloc (1000);
-	// buffer [999] = 0;
-	// fprintf(stderr, "===> %zd\n", read(0, buffer, 200));
-	// fprintf(stderr,"--> %s\n", buffer);
-	fprintf(stderr, "----------------- II ---------------\n");
-
 	close(info->pipefd[0]);
 	if (dup2(info->pipefd[1], 1) == -1)
 		return (perror("DUP2 FAILED\n"));
@@ -61,7 +52,6 @@ void	mid_cmd(t_cmd *cmd, t_data *info)
 
 void	last_cmd(t_cmd *cmd, t_data *info)
 {
-	fprintf(stderr, "----------------- I2 ---------------\n");
 	close(info->pipefd[1]);
 	// if (dup2 (info->pipefd[0], 0) == -1)
 	// 	return (perror("DUP2 FAILED\n"));
