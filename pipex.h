@@ -37,8 +37,8 @@ typedef struct	s_data
 
 /*			pipex.c			*/
 void	pipex(int ac, char **av, char **envp);
-t_data	*assignements(t_data *info, int ac, char **av, char **envp);
 void	add_to_list(t_cmd **list, t_cmd *new);
+t_data	*assignements(t_data *info, int ac, char **av, char **envp);
 // void	preliminaries(int ac, char **av, char **envp);
 
 
@@ -50,10 +50,10 @@ void	pipe_to_file(t_data *info, t_cmd *cmd);
 
 /*			utiles2.c		*/
 t_cmd	*last_node(t_cmd *list);
-t_cmd	*mk_node(t_data *info, char *av);
+t_cmd	*make_node(t_data *info, char *av);
 void	mid_cmd(t_cmd *cmd, t_data *info);
 void	last_cmd(t_cmd *cmd, t_data *info);
-void	first_cmd(char **av, t_cmd *cmd, t_data *info);
+void	first_cmd(t_cmd *cmd, t_data *info);
 
 /*			utiles3.c		*/
 void	free_arr(char **arr);

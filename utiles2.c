@@ -6,7 +6,7 @@
 /*   By: hamza <hamza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 06:34:06 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/07/12 09:47:56 by hamza            ###   ########.fr       */
+/*   Updated: 2024/07/27 07:02:08 by hamza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,43 +25,26 @@ t_cmd	*last_node(t_cmd *list)
 	return (list);
 }
 
-void	first_cmd(char **av, t_cmd *cmd, t_data *info)
+void	first_cmd(t_cmd *cmd, t_data *info)
 {
-	info->fd[0] = open(*(av + 1), O_RDONLY);
-	if (info->fd[0] == -1)
-	{
-		perror("Open Failed\n");
-		return ;
-	}
 	if (dup2 (info->fd[0], 0) == -1 || dup2(info->pipefd[1], 1) == -1)
-	{
-		perror("DUP2 FAILED\n");
-		return ;
-	}
+		return (perror("DUP2 FAILED\n"));
 	close (info->fd[0]);
 	close(info->pipefd[0]);
 	close(info->pipefd[1]);
-	fprintf(stderr, "--> HERE\n");
-	execve (cmd->path, cmd->args, NULL);
+	if (execve(cmd->path, cmd->args, NULL) == -1)
+	{
+		perror("EXECVE FAILED\n");
+		exit (1);
+	}
 }
 
 
 void	mid_cmd(t_cmd *cmd, t_data *info)
 {
-	fprintf(stdout,"--> HERE <--\n");
-	// char *buffer;
-	// buffer = (char *) malloc (1000);
-	// buffer [999] = 0;
-	// fprintf(stderr, "===> %zd\n", read(0, buffer, 200));
-	// fprintf(stderr,"--> %s\n", buffer);
-	if (dup2(info->pipefd[0], 0) == -1)
-		return (perror("DUP2 FAILED\n"));
-	fprintf(stderr, "----------------- II ---------------\n");
-
 	close(info->pipefd[0]);
 	if (dup2(info->pipefd[1], 1) == -1)
 		return (perror("DUP2 FAILED\n"));
-
 	close(info->pipefd[1]);
 	if (execve(cmd->path, cmd->args, NULL) == -1)
 	{
@@ -72,21 +55,19 @@ void	mid_cmd(t_cmd *cmd, t_data *info)
 
 void	last_cmd(t_cmd *cmd, t_data *info)
 {
-	fprintf(stderr, "----------------- I2 ---------------\n");
 	close(info->pipefd[1]);
-	if (dup2 (info->pipefd[0], 0) == -1)
-	{
-		perror("DUP2 FAILED\n");
-		return ;
-	}
 	close (info->pipefd[0]);
 	if (dup2 (info->fd[1], 1) == -1)
 		return (perror("DUP2 FAILED\n"));
 	close (info->fd[1]);
-	execve(cmd->path, cmd->args, NULL);
+	if (execve(cmd->path, cmd->args, NULL) == -1)
+	{
+		perror("EXECVE FAILED\n");
+		exit (1);
+	}
 }
 
-t_cmd	*mk_node(t_data *info, char *av)
+t_cmd	*make_node(t_data *info, char *av)
 {
 	t_cmd *new;
 

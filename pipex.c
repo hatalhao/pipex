@@ -6,7 +6,7 @@
 /*   By: hamza <hamza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 02:05:18 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/07/12 00:13:12 by hamza            ###   ########.fr       */
+/*   Updated: 2024/07/27 06:58:44 by hamza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@
 // 		free(fd);
 // 	}
 // }
+
 /*		This function adds a node to a linked list		*/
 void	add_to_list(t_cmd **list, t_cmd *new)
 {
@@ -110,6 +111,10 @@ t_data	*assignements(t_data *info, int ac, char **av, char **envp)
 	info->fd = (int *) malloc (sizeof(int) * 2);
 	if (!info->fd)
 		return (NULL);
+	info->fd[0] = open(av[1], O_RDONLY);
+	info->fd[1] = open(av[ac - 1], O_RDWR | O_CREAT | O_TRUNC, 0666);
+	if (info->fd[0] == -1 || info->fd[1] == -1)
+		return (NULL);
 	info->paths = get_paths(envp_path(envp));
 	info->ac = ac;
 	info->av = av;
@@ -122,6 +127,7 @@ void	pipex(int ac, char **av, char **envp)
 	int		i;
 	t_data	*info;
 	t_cmd	**list;
+	t_cmd	*new;
 
 	info = NULL;
 	list = (t_cmd **) malloc (sizeof(t_cmd *));
@@ -136,7 +142,12 @@ void	pipex(int ac, char **av, char **envp)
 	}
 	i = 2;
 	while (i < ac - 1)
-		add_to_list(list, mk_node(info, info->av[i++]));
+	{
+		new = make_node(info, info->av[i++]);
+		if (!new)
+			free_list(list);
+		add_to_list(list, new);
+	}
 	executions(list, info);
 	close(info->pipefd[0]);
 	close(info->pipefd[1]);
