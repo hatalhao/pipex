@@ -6,7 +6,7 @@
 /*   By: hamza <hamza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 02:08:30 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/07/27 06:50:59 by hamza            ###   ########.fr       */
+/*   Updated: 2024/07/28 00:00:04 by hamza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	pipe_to_pipe(t_data *info, t_cmd *cmd)
 {
 	if (pipe(info->pipefd) == -1)
 		return perror("PIPE FAILED\n");
-	if (dup2(info->keeper, 0) == -1)
+	if (dup2(info->keeper, info->pipefd[0]) == -1)
 		return (perror("dup2 in file_to_pipe failed\n"));
 	info->pid = fork();
 	if (info->pid == -1)
@@ -63,7 +63,7 @@ void	pipe_to_file(t_data *info, t_cmd *cmd)
 	info->pid = fork();
 	if (info->pid == -1)
 		return (perror("FORK FAILED\n"));
-	if (dup2(info->pipefd[0], info->keeper) == -1)
+	if (dup2(info->keeper, info->pipefd[0]) == -1)
 		return (perror("DUP2 FAILED\n"));
 	if (!info->pid)
 	{
