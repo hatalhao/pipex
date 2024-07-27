@@ -6,7 +6,7 @@
 /*   By: hamza <hamza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 06:34:06 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/07/12 09:47:56 by hamza            ###   ########.fr       */
+/*   Updated: 2024/07/27 00:39:59 by hamza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,6 @@ void	mid_cmd(t_cmd *cmd, t_data *info)
 	// buffer [999] = 0;
 	// fprintf(stderr, "===> %zd\n", read(0, buffer, 200));
 	// fprintf(stderr,"--> %s\n", buffer);
-	if (dup2(info->pipefd[0], 0) == -1)
-		return (perror("DUP2 FAILED\n"));
 	fprintf(stderr, "----------------- II ---------------\n");
 
 	close(info->pipefd[0]);
@@ -65,8 +63,8 @@ void	last_cmd(t_cmd *cmd, t_data *info)
 {
 	fprintf(stderr, "----------------- I2 ---------------\n");
 	close(info->pipefd[1]);
-	if (dup2 (info->pipefd[0], 0) == -1)
-		return (perror("DUP2 FAILED\n"));
+	// if (dup2 (info->pipefd[0], 0) == -1)
+	// 	return (perror("DUP2 FAILED\n"));
 	close (info->pipefd[0]);
 	if (dup2 (info->fd[1], 1) == -1)
 		return (perror("DUP2 FAILED\n"));
