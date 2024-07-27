@@ -6,7 +6,7 @@
 /*   By: hamza <hamza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 02:05:18 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/07/27 06:44:57 by hamza            ###   ########.fr       */
+/*   Updated: 2024/07/27 06:58:44 by hamza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ void	pipex(int ac, char **av, char **envp)
 	int		i;
 	t_data	*info;
 	t_cmd	**list;
+	t_cmd	*new;
 
 	info = NULL;
 	list = (t_cmd **) malloc (sizeof(t_cmd *));
@@ -141,7 +142,12 @@ void	pipex(int ac, char **av, char **envp)
 	}
 	i = 2;
 	while (i < ac - 1)
-		add_to_list(list, make_node(info, info->av[i++]));
+	{
+		new = make_node(info, info->av[i++]);
+		if (!new)
+			free_list(list);
+		add_to_list(list, new);
+	}
 	executions(list, info);
 	close(info->pipefd[0]);
 	close(info->pipefd[1]);
