@@ -6,7 +6,7 @@
 /*   By: hamza <hamza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 06:34:06 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/07/27 23:52:56 by hamza            ###   ########.fr       */
+/*   Updated: 2024/07/29 03:34:57 by hamza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,9 +27,9 @@ t_cmd	*last_node(t_cmd *list)
 
 void	first_cmd(t_cmd *cmd, t_data *info)
 {
-	if (dup2 (info->fd[0], 0) == -1 || dup2(info->pipefd[1], 1) == -1)
+	if (dup2 (info->infile, 0) == -1 || dup2(info->pipefd[1], 1) == -1)
 		return (perror("DUP2 FAILED\n"));
-	close (info->fd[0]);
+	close (info->infile);
 	close(info->pipefd[0]);
 	close(info->pipefd[1]);
 	if (execve(cmd->path, cmd->args, NULL) == -1)
@@ -42,9 +42,11 @@ void	first_cmd(t_cmd *cmd, t_data *info)
 
 void	mid_cmd(t_cmd *cmd, t_data *info)
 {
-	close(info->pipefd[0]);
-	if (dup2(info->pipefd[1], 1) == -1)
+	// dup2(info->pipefd[0], 0);
+	if (dup2(info->pipefd[0], STDIN_) == -1 || dup2(info->pipefd[1], STDOUT_) == -1)
 		return (perror("DUP2 FAILED\n"));
+	_____tester(info->pipefd[0], 198);
+	close(info->pipefd[0]);
 	close(info->pipefd[1]);
 	if (execve(cmd->path, cmd->args, NULL) == -1)
 	{
@@ -55,11 +57,11 @@ void	mid_cmd(t_cmd *cmd, t_data *info)
 
 void	last_cmd(t_cmd *cmd, t_data *info)
 {
-	close(info->pipefd[1]);
 	close (info->pipefd[0]);
-	if (dup2 (info->fd[1], 1) == -1)
+	close(info->pipefd[1]);
+	if (dup2 (info->outfile, 1) == -1)
 		return (perror("DUP2 FAILED\n"));
-	close (info->fd[1]);
+	close (info->outfile);
 	if (execve(cmd->path, cmd->args, NULL) == -1)
 	{
 		perror("EXECVE FAILED\n");

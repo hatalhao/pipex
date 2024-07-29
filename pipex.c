@@ -6,7 +6,7 @@
 /*   By: hamza <hamza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 02:05:18 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/07/27 06:58:44 by hamza            ###   ########.fr       */
+/*   Updated: 2024/07/29 03:35:22 by hamza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,12 +108,10 @@ t_data	*assignements(t_data *info, int ac, char **av, char **envp)
 	info = (t_data*) malloc (sizeof(t_data));
 	if (!info)
 		return (NULL);
-	info->fd = (int *) malloc (sizeof(int) * 2);
-	if (!info->fd)
-		return (NULL);
-	info->fd[0] = open(av[1], O_RDONLY);
-	info->fd[1] = open(av[ac - 1], O_RDWR | O_CREAT | O_TRUNC, 0666);
-	if (info->fd[0] == -1 || info->fd[1] == -1)
+	info->infile = open(av[1], O_RDONLY);
+	info->outfile = open(av[ac - 1], O_RDWR | O_CREAT | O_TRUNC, 0666);
+	info->keeper = open("/home/hamza/pipex", __O_TMPFILE | O_RDWR | O_TRUNC, 0666);
+	if (info->infile == -1 || info->outfile == -1)
 		return (NULL);
 	info->paths = get_paths(envp_path(envp));
 	info->ac = ac;
@@ -153,7 +151,6 @@ void	pipex(int ac, char **av, char **envp)
 	close(info->pipefd[1]);
 	free_list (list);
 	free_arr (info->paths);
-	free (info->fd);
 	free (info);
 }
 

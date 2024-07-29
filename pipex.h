@@ -6,7 +6,7 @@
 /*   By: hamza <hamza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 01:49:04 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/07/12 09:20:35 by hamza            ###   ########.fr       */
+/*   Updated: 2024/07/28 22:28:43 by hamza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,9 @@
 
 #include "libft/libft.h"
 #include <sys/wait.h>
+
+#define	STDIN_ 0
+#define	STDOUT_ 1
 
 typedef	struct		s_cmd
 {
@@ -31,7 +34,8 @@ typedef struct	s_data
 	char	**paths;
 	int		pid;
 	int		keeper;
-	int		*fd;
+	int		infile;
+	int		outfile;
 	int		pipefd[2];
 }				t_data;
 
@@ -43,10 +47,11 @@ t_data	*assignements(t_data *info, int ac, char **av, char **envp);
 
 
 /*			utiles.c		*/
-void	executions(t_cmd **list, t_data *info);
+void	_____tester(int pipefd, int size);
 void	file_to_pipe(t_data *info, t_cmd *cmd);
 void	pipe_to_pipe(t_data *info, t_cmd *cmd);
 void	pipe_to_file(t_data *info, t_cmd *cmd);
+void	executions(t_cmd **list, t_data *info);
 
 /*			utiles2.c		*/
 t_cmd	*last_node(t_cmd *list);
