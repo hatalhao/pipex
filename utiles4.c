@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   utiles4.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hamza <hamza@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 06:56:47 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/07/27 06:43:03 by hamza            ###   ########.fr       */
+/*   Updated: 2024/07/30 17:11:54 by hatalhao         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "pipex.h"
 
@@ -44,17 +44,11 @@ char	*extract_path(char **paths, t_cmd *cmd)
 		buffer = ft_join(ft_join(ft_duplicate(paths[i++]), ft_duplicate("/")), ft_duplicate(*(cmd->args)));
 		v = access(buffer, X_OK);
 		if (!v)
-		{
-			printf("ACCESS GRANTED\n");
-			break;
-		}
-		free(buffer);
+			break ;
+		free (buffer);
 	}
 	if (v == -1)
-	{
 		buffer = NULL;
-		printf("ACCESS_FAILURE\n");
-	}
 	return (buffer);
 }
 

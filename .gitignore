@@ -50,3 +50,8 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Learning/Testing Files
+reutiles.c
+exp.c
+test_0.c

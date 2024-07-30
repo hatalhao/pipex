@@ -1,97 +1,16 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hamza <hamza@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 02:05:18 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/07/29 03:35:22 by hamza            ###   ########.fr       */
+/*   Updated: 2024/07/30 17:19:04 by hatalhao         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "pipex.h"
-
-
-
-// int	cmd_access(t_data *info, t_cmd *cmd)
-// {
-// 	int	v;
-
-// 	v = 0;
-// 	v = access(cmd->path, X_OK);
-// 	if (v == 0)
-// 		return ();
-// }
-
-
-
-// void	preliminaries(int ac, char **av, char **envp)
-// {
-// 	int pipefd[2];
-// 	char **paths;
-// 	t_cmd *cmd1;
-// 	t_cmd *cmd2;
-// 	int i;
-// 	int j;
-// 	int *pid;
-// 	int *fd;
-
-// 	int n = ac - 3;
-// 	int t = 0;
-// 	pid = (int *)malloc(sizeof(int) * n);
-// 	fd = (int *)malloc(sizeof(int) * 2);
-// 	cmd1 = (t_cmd *)malloc(sizeof(t_cmd));
-// 	cmd2 = (t_cmd *)malloc(sizeof(t_cmd));
-// 	i = 0;
-// 	j = 1;
-// 	if (access(*av, X_OK) == 0)
-// 		cmd1->path = *av;
-// 	else
-// 	{
-// 		paths = get_paths((envp_path(envp)));
-// 		cmd1->args = get_args(*(av + 1));
-// 		cmd2->args = get_args(*(av + 2));
-// 		cmd1->path = extract_path(paths, cmd1);
-// 		cmd2->path = extract_path(paths, cmd2);
-// 		if (!(cmd1->path) || !(cmd2->path))
-// 		{
-// 			perror("Path not found\n");
-// 			free_arr(paths);
-// 			free_struct(cmd1);
-// 			free_struct(cmd2);
-// 			free(pid);
-// 			free(fd);
-// 			exit(1);
-// 		}
-// 		pipe(pipefd);
-// 		if (!(pid[t] = fork()))
-// 		{
-// 			fd[0] = open(*av, O_RDONLY);
-// 			close(pipefd[0]);
-// 			dup2(fd[0], 0);
-// 			dup2(pipefd[1], 1);
-// 			execve(cmd1->path, cmd1->args, NULL);
-// 		}
-// 		waitpid(pid[t++], NULL, 0);
-// 		if (!(pid[t] = fork()))
-// 		{
-// 			fd[1] = open(*(av + 3), O_RDWR | O_CREAT, 0666);
-// 			close(pipefd[1]);
-// 			dup2(pipefd[0], 0);
-// 			dup2(fd[1], 1);
-// 			execve(cmd2->path, cmd2->args, NULL);
-// 		}
-// 		close (pipefd[1]);
-// 		waitpid(-1, NULL, 0);
-// 		close (pipefd[0]);
-// 		free_arr(paths);
-// 		free_struct(cmd1);
-// 		free_struct(cmd2);
-// 		free(pid);
-// 		free(fd);
-// 	}
-// }
 
 /*		This function adds a node to a linked list		*/
 void	add_to_list(t_cmd **list, t_cmd *new)
@@ -110,7 +29,6 @@ t_data	*assignements(t_data *info, int ac, char **av, char **envp)
 		return (NULL);
 	info->infile = open(av[1], O_RDONLY);
 	info->outfile = open(av[ac - 1], O_RDWR | O_CREAT | O_TRUNC, 0666);
-	info->keeper = open("/home/hamza/pipex", __O_TMPFILE | O_RDWR | O_TRUNC, 0666);
 	if (info->infile == -1 || info->outfile == -1)
 		return (NULL);
 	info->paths = get_paths(envp_path(envp));
@@ -158,9 +76,6 @@ int	main(int ac, char **av, char **envp)
 {
 	if (ac < 5)
 		return (1);
-	// preliminaries(ac, av + 1, envp);
 	pipex(ac, av, envp);
-	// sleep (100);
-	// fprintf(stderr ,"dd\n");
 	return (0);
 }

@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hamza <hamza@student.42.fr>                +#+  +:+       +#+        */
+/*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 01:49:04 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/07/28 22:28:43 by hamza            ###   ########.fr       */
+/*   Updated: 2024/07/30 17:38:19 by hatalhao         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef PIPEX_H
 #define PIPEX_H
@@ -16,8 +16,8 @@
 #include "libft/libft.h"
 #include <sys/wait.h>
 
-#define	STDIN_ 0
-#define	STDOUT_ 1
+#define	STDIN 0		/* Standard input.  */
+#define	STDOUT 1	/* Standard output.  */
 
 typedef	struct		s_cmd
 {
@@ -32,7 +32,7 @@ typedef struct	s_data
 	char	**av;
 	char	**envp;
 	char	**paths;
-	int		pid;
+	pid_t	pid;
 	int		keeper;
 	int		infile;
 	int		outfile;
@@ -43,7 +43,6 @@ typedef struct	s_data
 void	pipex(int ac, char **av, char **envp);
 void	add_to_list(t_cmd **list, t_cmd *new);
 t_data	*assignements(t_data *info, int ac, char **av, char **envp);
-// void	preliminaries(int ac, char **av, char **envp);
 
 
 /*			utiles.c		*/
