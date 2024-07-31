@@ -7,7 +7,7 @@ CC = cc
 CFLAGS = -Werror -Wall -Wextra #-g3 -fsanitize=address
 
 #SRC = $(wildcard *.c)
-SRC = pipex.c utiles.c utiles2.c utiles3.c utiles4.c\
+SRC = pipex.c execution.c args_and_paths.c free_variants.c utiles2.c\
 
 OBJ = $(SRC:.c=.o)
 

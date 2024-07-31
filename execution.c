@@ -1,12 +1,12 @@
 /******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utiles.c                                           :+:      :+:    :+:   */
+/*   execution.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 02:08:30 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/07/30 18:16:21 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/07/31 19:42:31 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -14,7 +14,8 @@
 
 void	error_exit(char *str)
 {
-	fprintf(stderr, "Error in %s", str);
+	ft_putstr_fd("Error in ", 2);
+	ft_putstr_fd(str, 2);
 	exit(1);	
 }
 
@@ -53,7 +54,7 @@ void pipe_to_pipe(t_data *info, t_cmd *cmd)
 		if (dup2(info->keeper, STDIN) == -1 || dup2(info->pipefd[1], STDOUT) == -1)
 			error_exit("dup2");
 		close(info->keeper);
-		close(info->pipefd[1]);	
+		close(info->pipefd[1]);
 		execve(cmd->path, cmd->args, NULL);
 			error_exit("execve");
 	}
@@ -71,12 +72,10 @@ void pipe_to_file(t_data *info, t_cmd *cmd)
 	{
 		if (dup2(info->keeper, STDIN) == -1 || dup2(info->outfile, STDOUT) == -1)
 			error_exit("dup2");
-		
 		close(info->keeper);
 		close(info->outfile);	
 		execve(cmd->path, cmd->args, NULL);
 			error_exit("execve");
-
 	}
 	close(info->keeper);
 	close(info->outfile);
@@ -87,10 +86,13 @@ void executions(t_cmd **list, t_data *info)
 	t_cmd	*tail;
 	t_cmd	*iter;
 	int 	index;
+	pid_t	*pids;
+	
 	
 	index = 0;
 	tail = last_node(*list);
 	iter = *list;
+	pids = (int *) malloc (sizeof(int) * (info->ac - 3));
 	while (iter)
 	{
 		if (iter == *list)
@@ -99,11 +101,10 @@ void executions(t_cmd **list, t_data *info)
 			pipe_to_file(info, iter);
 		else
 			pipe_to_pipe(info, iter);
+		pids[index++] = info->pid;
 		iter = iter->next;
 	}
+	index = 0;
 	while (index < info->ac - 3)
-	{
-		waitpid(info->pid, NULL, 0);
-		index++;
-	}
+		waitpid(pids[index++], NULL, 0);
 }

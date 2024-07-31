@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 06:56:47 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/07/30 17:11:54 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/07/30 22:56:06 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -61,7 +61,7 @@ char	*envp_path(char **envp)
 	path = NULL;
 	while (envp && envp[i])
 	{
-		if (!ft_strncmp("PATH", envp[i], 4))
+		if (!ft_strncmp("PATH=", envp[i], 5))
 		{
 			path = envp[i];
 			return (path);

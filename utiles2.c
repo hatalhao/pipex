@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 06:34:06 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/07/30 17:39:37 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/07/30 18:28:07 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -38,7 +38,6 @@ void	first_cmd(t_cmd *cmd, t_data *info)
 		exit (1);
 	}
 }
-
 
 void	mid_cmd(t_cmd *cmd, t_data *info)
 {

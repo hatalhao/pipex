@@ -6,20 +6,20 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 01:49:04 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/07/30 17:38:19 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/07/31 03:48:31 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
 #ifndef PIPEX_H
-#define PIPEX_H
+# define PIPEX_H
 
-#include "libft/libft.h"
-#include <sys/wait.h>
+# include "libft/libft.h"
+# include <sys/wait.h>
 
-#define	STDIN 0		/* Standard input.  */
-#define	STDOUT 1	/* Standard output.  */
+# define STDIN 0		/* Standard input.  */
+# define STDOUT 1	/* Standard output.  */
 
-typedef	struct		s_cmd
+ typedef	struct		s_cmd
 {
 	char			*path;
 	char			**args;
@@ -28,15 +28,16 @@ typedef	struct		s_cmd
 
 typedef struct	s_data
 {
-	int		ac;
+	char	*limiter;
 	char	**av;
 	char	**envp;
 	char	**paths;
-	pid_t	pid;
+	int		ac;
 	int		keeper;
 	int		infile;
 	int		outfile;
 	int		pipefd[2];
+	pid_t	pid;
 }				t_data;
 
 /*			pipex.c			*/

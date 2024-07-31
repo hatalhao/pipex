@@ -1,2 +1,3 @@
-- Fix the way a passes info to the next pipe.
-- 
+Check for the infile first
+Parse Commands
+Handle leaks.
