@@ -6,7 +6,7 @@
 /*   By: hamza <hamza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 01:49:04 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/01 01:07:47 by hamza            ###   ########.fr       */
+/*   Updated: 2024/08/01 06:29:48 by hamza            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,31 +40,36 @@ typedef struct	s_data
 	pid_t	pid;
 }				t_data;
 
-/*			pipex.c			*/
+/*			pipex.c				*/
 void	pipex(int ac, char **av, char **envp);
 void	add_to_list(t_cmd **list, t_cmd *new);
 t_data	*assignements(t_data *info, int ac, char **av, char **envp);
 
 
-/*			utiles.c		*/
+/*			utiles.c			*/
 void	_____tester(int pipefd, int size);
 void	file_to_pipe(t_data *info, t_cmd *cmd);
 void	pipe_to_pipe(t_data *info, t_cmd *cmd);
 void	pipe_to_file(t_data *info, t_cmd *cmd);
 void	executions(t_cmd **list, t_data *info);
 
-/*			utiles2.c		*/
+/*			utiles2.c			*/
 t_cmd	*last_node(t_cmd *list);
 t_cmd	*make_node(t_data *info, char *av);
-char	*heredoc_or_simple_file(char *arg);
+void	heredoc_or_simple_file(int ac, char **av, char **envp);
 
-/*			utiles3.c		*/
+/*			the_heredoc.c		*/
+void	pipex_heredoc(int ac, char **av, char **envp);
+void	heredoc_init(t_data *info, t_cmd ***list, int ac, char **av, char **envp);
+
+
+/*			utiles3.c			*/
 void	free_arr(char **arr);
 void	free_struct(t_cmd *cmd);
 void	free_list(t_cmd **list);
 
 
-/*			utiles4.c		*/
+/*			utiles4.c			*/
 char	**get_args(char *cmd);
 char	**get_paths(char *envp);
 char	*envp_path(char **envp);
