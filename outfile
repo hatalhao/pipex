@@ -1,9 +1,0 @@
-.gitignore
-.vscode
-args_and_paths.o
-execution.c
-execution.o
-free_variants.o
-pipex.o
-the_heredoc.c
-utiles2.o

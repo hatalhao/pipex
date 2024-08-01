@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hamza <hamza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 02:05:18 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/07/31 18:24:24 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/01 02:30:40 by hamza            ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "pipex.h"
 
@@ -36,17 +36,7 @@ t_data	*assignements(t_data *info, int ac, char **av, char **envp)
 	info = (t_data*) malloc (sizeof(t_data));
 	if (!info)
 		return (NULL);
-	if (!ft_strncmp(av[1], "here_doc", 8) && ft_length(av[1]) == 8)
-	{
-		info->infile = open("/nfs/homes/hatalhao/Desktop/pipex/here_doc", O_CREAT | O_RDWR | O_APPEND, 0666);
-		unlink("/nfs/homes/hatalhao/Desktop/pipex/here_doc");
-		if (info->infile == -1)
-			ft_printf("HERE -1\n");
-		info->limiter = av[2];
-	}
-	else
-		info->infile = open(av[1], O_RDWR);
-	// sleep (100);
+	info->infile = open(av[1], O_RDWR);
 	info->outfile = open(av[ac - 1], O_RDWR | O_CREAT | O_TRUNC);
 	if (info->infile == -1 || info->outfile == -1)
 		return (NULL);
@@ -65,16 +55,13 @@ void	pipex(int ac, char **av, char **envp)
 	int		i;
 
 	info = NULL;
+	info = assignements(info, ac, av, envp);
+	if (!info)
+		exit (1);
 	list = (t_cmd **) malloc (sizeof(t_cmd *));
 	if (!list)
 		exit(1);
 	*list = 0;
-	info = assignements(info, ac, av, envp);
-	if (!info)
-	{
-		free (list);
-		exit (1);
-	}
 	i = 2;
 	while (i < ac - 1)
 	{
@@ -91,7 +78,6 @@ int	main(int ac, char **av, char **envp)
 {
 	if (ac < 5)
 		return (1);
-		
-	pipex(ac, av, envp);
+	heredoc_or_simple_file(av[1]);
 	return (0);
 }

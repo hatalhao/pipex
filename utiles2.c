@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   utiles2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hamza <hamza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/10 06:34:06 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/07/30 18:28:07 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/01 02:11:00 by hamza            ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "pipex.h"
 
@@ -25,48 +25,6 @@ t_cmd	*last_node(t_cmd *list)
 	return (list);
 }
 
-void	first_cmd(t_cmd *cmd, t_data *info)
-{
-	close(info->pipefd[0]);
-	if (dup2 (info->infile, STDIN) == -1 || dup2(info->pipefd[1], STDOUT) == -1)
-		return (perror("DUP2 FAILED in first_cmd\n"));
-	close (info->infile);
-	close(info->pipefd[1]);
-	if (execve(cmd->path, cmd->args, NULL) == -1)
-	{
-		perror("EXECVE FAILED in first_cmd\n");
-		exit (1);
-	}
-}
-
-void	mid_cmd(t_cmd *cmd, t_data *info)
-{
-	close(info->pipefd[0]);
-	if (dup2(info->keeper, STDIN) == -1 || dup2(info->pipefd[1], STDOUT) == -1)	
-		return (perror("DUP2 FAILED in mid_cmd\n"));
-	close (info->keeper);
-	close(info->pipefd[1]);
-	if (execve(cmd->path, cmd->args, NULL) == -1)
-	{
-		perror("EXECVE FAILED in mid_cmd\n");
-		exit (1);
-	}
-}
-
-void	last_cmd(t_cmd *cmd, t_data *info)
-{
-	close (info->pipefd[0]);
-	close(info->pipefd[1]);
-	if (dup2 (info->outfile, STDOUT) == -1)
-		return (perror("DUP2 FAILED in last_cmd\n"));
-	close (info->outfile);
-	if (execve(cmd->path, cmd->args, NULL) == -1)
-	{
-		perror("EXECVE FAILED in last_cmd\n");
-		exit (1);
-	}
-}
-
 t_cmd	*make_node(t_data *info, char *av)
 {
 	t_cmd *new;
@@ -78,4 +36,12 @@ t_cmd	*make_node(t_data *info, char *av)
 	new->path = extract_path(info->paths, new);
 	new->next = NULL;
 	return (new);
+}
+
+void	heredoc_or_simple_file(int ac, char **av, char **envp)
+{
+	if (!ft_strncmp(av[1], "here_doc", ft_length(av[1])) && ft_length(av[1]) == 8)
+		pipex_heredoc(ac, av, envp);
+	else
+		pipex(ac, av, envp);
 }

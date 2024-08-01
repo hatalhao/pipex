@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   pipex.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
+/*   By: hamza <hamza@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/05/12 01:49:04 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/07/31 03:48:31 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/01 01:07:47 by hamza            ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #ifndef PIPEX_H
 # define PIPEX_H
@@ -56,9 +56,7 @@ void	executions(t_cmd **list, t_data *info);
 /*			utiles2.c		*/
 t_cmd	*last_node(t_cmd *list);
 t_cmd	*make_node(t_data *info, char *av);
-void	mid_cmd(t_cmd *cmd, t_data *info);
-void	last_cmd(t_cmd *cmd, t_data *info);
-void	first_cmd(t_cmd *cmd, t_data *info);
+char	*heredoc_or_simple_file(char *arg);
 
 /*			utiles3.c		*/
 void	free_arr(char **arr);
