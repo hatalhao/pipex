@@ -7,7 +7,9 @@
     "wait.h": "c",
     "stdio.h": "c",
     "stat.h": "c",
-    "struct_stat_time64_helper.h": "c"
+    "struct_stat_time64_helper.h": "c",
+    "signal.h": "c",
+    "siginfo_t.h": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",
