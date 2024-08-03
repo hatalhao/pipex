@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/03 02:30:28 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/03 07:02:17 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/03 07:09:45 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
@@ -39,7 +39,7 @@ t_data	*heredoc_assignements(t_data *info, int ac, char **av, char **envp)
 	if (!info)
 		return (NULL);
 	info->infile = open("/tmp/.heredoc_", O_RDWR | O_CREAT | O_APPEND, 0666);
-	info->outfile = open(av[ac - 1], O_RDWR | O_CREAT , 0644);
+	info->outfile = open(av[ac - 1], O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (info->infile == -1 || info->outfile == -1)
 		return (NULL);
 	info->limiter = ft_join(ft_duplicate(av[2]), ft_duplicate("\n"));
@@ -72,7 +72,13 @@ void	fill_the_doc(t_data *info)
 }
 
 /**/
-
+void	offset_reposition(t_data *info)
+{
+	close (info->infile);
+	info->infile = open("/tmp/.heredoc_", O_RDWR, 0666);
+	if (info->infile == -1)
+		exit (1); //will need cleaning up
+}
 
 /**/
 void	pipex_heredoc(int ac, char **av, char **envp)
@@ -89,8 +95,7 @@ void	pipex_heredoc(int ac, char **av, char **envp)
 	if (!list)
 		exit(1);
 	fill_the_doc(info);
-	close (info->infile);
-	info->infile = open("/tmp/.heredoc_", O_RDWR, 0666);
+	offset_reposition(info);
 	executions_heredoc(*list, info);
 	final_curtain(list, info, 1);
 }
