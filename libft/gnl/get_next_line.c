@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/15 07:36:05 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/04/26 17:01:29 by hatalhao         ###   ########.fr       */
+/*   Created: 2024/08/04 04:36:17 by hatalhao          #+#    #+#             */
+/*   Updated: 2024/08/04 04:36:18 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char	*ft_read(int fd)
 	return (str);
 }
 
-char	*get_next_line(int fd)
+char	*get_next_line(int fd, int to_free)
 {
 	static char	*remainder;
 	char		*total;
@@ -92,7 +92,7 @@ char	*get_next_line(int fd)
 	tmp = 0;
 	total = 0;
 	if (fd < 0 || (read (fd, total, 0) == -1)
-		|| BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX)
+		|| BUFFER_SIZE <= 0 || BUFFER_SIZE > INT_MAX || to_free)
 	{
 		ft_free(&remainder);
 		return (NULL);

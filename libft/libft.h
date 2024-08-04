@@ -10,17 +10,17 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <stdio.h>
-# include <string.h>
-# include <limits.h>
-# include <stdarg.h>
-# include <stdint.h>
-# include <fcntl.h>
-# include <errno.h>
-# include "ft_printf/ft_printf.h"
-# include "gnl/get_next_line.h"
+#include "ft_printf/ft_printf.h"
+#include "gnl/get_next_line.h"
+#include <errno.h>
+#include <fcntl.h>
+#include <limits.h>
+#include <stdarg.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
 
 void	ft_putstr_fd(char *s, int fd);
 void	*ft_memcpy(void *dest, void const *src, size_t n);

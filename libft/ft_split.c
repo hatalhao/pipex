@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/11/06 03:44:27 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/04/19 19:41:04 by hatalhao         ###   ########.fr       */
+/*   Created: 2024/08/04 04:35:28 by hatalhao          #+#    #+#             */
+/*   Updated: 2024/08/04 04:35:29 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ static char	**str_all_fill(char **str, char const *s, char c)
 
 char	**ft_split(char const *s, char c)
 {
-	char		**str;
+	char	**str;
 
 	if (!s)
 		return (0);

@@ -1,0 +1,14 @@
+    31			close(info->pipefd[0]);$
+    35			close(info->infile);$
+    36			close(info->pipefd[1]);$
+    40		close(info->pipefd[1]);$
+    41		close(info->infile);$
+    54			close(info->pipefd[0]);$
+    58			close(info->keeper);$
+    59			close(info->pipefd[1]);$
+    63		close(info->pipefd[1]);$
+    64		close(info->keeper);$
+    78			close(info->keeper);$
+    79			close(info->outfile);$
+    83		close(info->keeper);$
+    84		close(info->outfile);$

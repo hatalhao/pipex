@@ -1,14 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   the_heredoc.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/03 02:30:28 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/03 07:09:45 by hatalhao         ###   ########.fr       */
+/*   Created: 2024/08/04 04:32:29 by hatalhao          #+#    #+#             */
+/*   Updated: 2024/08/04 04:33:33 by hatalhao         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "pipex.h"
 
@@ -18,7 +18,7 @@ t_cmd	**init_list_heredoc(t_cmd **list, t_data *info)
 	t_cmd	*new_node;
 
 	i = 3;
-	list = (t_cmd **) malloc (sizeof(t_cmd *));
+	list = (t_cmd **)malloc(sizeof(t_cmd *));
 	if (!list)
 		return (NULL);
 	*list = 0;
@@ -32,26 +32,26 @@ t_cmd	**init_list_heredoc(t_cmd **list, t_data *info)
 	return (list);
 }
 
-/**/
+/*		*/
 t_data	*heredoc_assignements(t_data *info, int ac, char **av, char **envp)
 {
-	info = (t_data *) malloc (sizeof(t_data));
+	info = (t_data *)malloc(sizeof(t_data));
 	if (!info)
 		return (NULL);
 	info->infile = open("/tmp/.heredoc_", O_RDWR | O_CREAT | O_APPEND, 0666);
 	info->outfile = open(av[ac - 1], O_RDWR | O_CREAT | O_TRUNC, 0644);
 	if (info->infile == -1 || info->outfile == -1)
-		return (NULL);
-	info->limiter = ft_join(ft_duplicate(av[2]), ft_duplicate("\n"));
-	info->non_cmd = 4;
+		return (free(info), NULL);
 	info->paths = get_paths(envp_path(envp));
+	info->non_cmd = 4;
+	info->envp = envp;
+	info->limiter = ft_join(ft_duplicate(av[2]), ft_duplicate("\n"));
 	info->ac = ac;
 	info->av = av;
-	info->envp = envp;
 	return (info);
 }
 
-/**/
+/*		Fill the heredoc	*/
 void	fill_the_doc(t_data *info)
 {
 	char	*input;
@@ -61,26 +61,28 @@ void	fill_the_doc(t_data *info)
 	limiter_len = ft_length(info->limiter);
 	while (1)
 	{
-		input = get_next_line(0);
+		input = get_next_line(0, 0);
 		input_len = ft_length(input);
 		if (!ft_strncmp(input, info->limiter, input_len)
 			&& input_len == limiter_len)
-			return (free(input));
+			return (free(input), (void)get_next_line(0, 1));
 		ft_putstr_fd(input, info->infile);
-		free (input);
+		free(input);
 	}
 }
 
-/**/
+/*		This function is to reposition the write/read
+offset since lseek() is not allowed		*/
 void	offset_reposition(t_data *info)
 {
-	close (info->infile);
+	close(info->infile);
 	info->infile = open("/tmp/.heredoc_", O_RDWR, 0666);
 	if (info->infile == -1)
-		exit (1); //will need cleaning up
+		exit(1);
 }
+// will need cleaning up if (info->infile == -1)
 
-/**/
+/*		Outline how the heredoc scenario will work		*/
 void	pipex_heredoc(int ac, char **av, char **envp)
 {
 	t_cmd	**list;
@@ -96,6 +98,6 @@ void	pipex_heredoc(int ac, char **av, char **envp)
 		exit(1);
 	fill_the_doc(info);
 	offset_reposition(info);
-	executions_heredoc(*list, info);
+	executions(*list, info);
 	final_curtain(list, info, 1);
 }

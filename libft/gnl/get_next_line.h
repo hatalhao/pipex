@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/12 21:31:31 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/04/26 16:48:31 by hatalhao         ###   ########.fr       */
+/*   Created: 2024/08/04 04:36:24 by hatalhao          #+#    #+#             */
+/*   Updated: 2024/08/04 04:36:25 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,10 @@
 # include <unistd.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 4
+#  define BUFFER_SIZE 1
 # endif
 
-char	*get_next_line(int fd);
+char	*get_next_line(int fd, int to_free);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_join(char *s1, char *s2);
 char	*ft_duplicate(char const *src);
