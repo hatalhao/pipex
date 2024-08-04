@@ -1,21 +1,45 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   free_variants.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/04 04:34:27 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/04 04:34:28 by hatalhao         ###   ########.fr       */
+/*   Created: 2024/08/04 04:15:04 by hatalhao          #+#    #+#             */
+/*   Updated: 2024/08/04 06:02:09 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../pipex.h"
 
-int	main(int ac, char **av, char **envp)
+void	free_arr(char **arr)
 {
-	if (ac < 5)
-		return (1);
-	heredoc_or_simple_file(ac, av, envp);
-	return (0);
+	int	i;
+
+	i = 0;
+	while (arr && arr[i])
+		free(arr[i++]);
+	free(arr);
+}
+
+void	free_struct(t_cmd *cmd)
+{
+	free_arr(cmd->args);
+	free(cmd->path);
+	free(cmd);
+}
+
+void	free_list(t_cmd **list)
+{
+	t_cmd	*iter;
+	t_cmd	*tmp;
+
+	iter = *list;
+	while (iter)
+	{
+		tmp = iter;
+		iter = iter->next;
+		free_struct(tmp);
+	}
+	free(list);
 }

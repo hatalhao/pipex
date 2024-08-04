@@ -6,11 +6,11 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 04:32:29 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/04 04:33:33 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/04 06:15:56 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../pipex.h"
 
 t_cmd	**init_list_heredoc(t_cmd **list, t_data *info)
 {
@@ -98,6 +98,7 @@ void	pipex_heredoc(int ac, char **av, char **envp)
 		exit(1);
 	fill_the_doc(info);
 	offset_reposition(info);
-	executions(*list, info);
+	executions(list, info);
+	ft_putstr_fd("HERE\n", 2);
 	final_curtain(list, info, 1);
 }

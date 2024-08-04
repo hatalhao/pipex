@@ -6,11 +6,11 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 04:15:31 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/04 04:28:55 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/04 07:15:16 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../pipex.h"
 
 /*		Clean all open file descriptors heap-allocated memory		*/
 void	final_curtain(t_cmd **list, t_data *info, int bool)
@@ -19,13 +19,12 @@ void	final_curtain(t_cmd **list, t_data *info, int bool)
 	close(info->pipefd[1]);
 	free_list(list);
 	free_arr(info->paths);
+	free (info->pids);
 	if (bool == 1)
 	{
 		free(info->limiter);
 		if (unlink("/tmp/.heredoc_") == -1)
-			error_exit("unlink\n");
-		else
-			ft_putstr_fd("Unlink was successful", 2);
+			error_exit();
 	}
 	free(info);
 }
@@ -71,7 +70,7 @@ t_data	*assignements(t_data *info, int ac, char **av, char **envp)
 	info->outfile = open(av[ac - 1], O_RDWR | O_CREAT | O_TRUNC, 0666);
 	if (info->infile == -1 || info->outfile == -1)
 	{
-		ft_putstr_fd("File problem\n", 2);
+		error_exit();
 		return (free(info), NULL);
 	}
 	info->paths = get_paths(envp_path(envp));
@@ -95,6 +94,6 @@ void	pipex(int ac, char **av, char **envp)
 		exit(1);
 	list = 0;
 	list = init_list(list, info);
-	executions(*list, info);
+	executions(list, info);
 	final_curtain(list, info, 0);
 }

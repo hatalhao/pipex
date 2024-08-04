@@ -6,11 +6,11 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 04:27:55 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/04 04:28:23 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/04 06:02:09 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "pipex.h"
+#include "../pipex.h"
 
 t_cmd	*last_node(t_cmd *list)
 {

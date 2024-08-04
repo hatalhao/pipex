@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 04:27:04 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/04 04:27:05 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/04 07:44:32 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_data
 	int				outfile;
 	int				pipefd[2];
 	pid_t			pid;
+	pid_t			*pids;
 }					t_data;
 
 /*			pipex.c							*/
@@ -49,33 +50,31 @@ void				add_to_list(t_cmd **list, t_cmd *new);
 void				final_curtain(t_cmd **list, t_data *info, int bool);
 t_data				*assignements(t_data *info, int ac, char **av, char **envp);
 
-/*			execution.c						*/
-void				error_exit(char *str);
-void				file_to_pipe(t_data *info, t_cmd *cmd);
-void				pipe_to_pipe(t_data *info, t_cmd *cmd);
-void				pipe_to_file(t_data *info, t_cmd *cmd);
-void				executions(t_cmd *list, t_data *info);
+/*					execution.c						*/
+void				error_exit(void);
+void				file_to_pipe(t_data *info, t_cmd *cmd, t_cmd **list);
+void				pipe_to_pipe(t_data *info, t_cmd *cmd, t_cmd **list);
+void				pipe_to_file(t_data *info, t_cmd *cmd, t_cmd **list);
+void				executions(t_cmd **list, t_data *info);
 
-/*			utiles2.c						*/
+/*					utiles2.c						*/
 t_cmd				*last_node(t_cmd *list);
 t_cmd				*make_node(t_data *info, char *av);
 void				heredoc_or_simple_file(int ac, char **av, char **envp);
 
-/*			the_heredoc.c					*/
+/*					the_heredoc.c					*/
 void				pipex_heredoc(int ac, char **av, char **envp);
 
-/*			free_variants.c						*/
+/*					free_variants.c						*/
 void				free_arr(char **arr);
 void				free_struct(t_cmd *cmd);
 void				free_list(t_cmd **list);
 
-/*			args_and_paths.c						*/
+/*					args_and_paths.c					*/
+
 char				**get_args(char *cmd);
 char				**get_paths(char *envp);
 char				*envp_path(char **envp);
 char				*extract_path(char **paths, t_cmd *cmd);
-
-/*			execution_heredoc.c			*/
-void				executions_heredoc(t_cmd *list, t_data *info);
 
 #endif
