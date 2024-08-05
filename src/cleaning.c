@@ -6,12 +6,14 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 14:56:17 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/05 15:36:26 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/05 17:23:28 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
+/*		Free heap-allocated memory
+and close open files based on the given flag	*/
 void	clean_data_mandatory(t_data *info, int flag)
 {
 	if (flag == 2)

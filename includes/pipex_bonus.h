@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 07:18:27 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/05 17:07:36 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/05 17:29:03 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include "pipex.h"
 
-void				clean_data_only_heredoc(t_data *info);
+void				clean_data_only_heredoc(t_data *info, int flag);
 void				clean_all_heredoc(t_data *info, t_cmd **list);
 /*					cleaning_heredoc.c					*/
 

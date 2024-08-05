@@ -6,12 +6,13 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 04:15:04 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/05 16:46:58 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/05 17:46:15 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
+/*		Free an array of strings	*/
 void	free_arr(char **arr)
 {
 	int	i;
@@ -22,6 +23,7 @@ void	free_arr(char **arr)
 	free(arr);
 }
 
+/*		Free a single node in a single list		*/
 void	free_node(t_cmd *cmd)
 {
 	free_arr(cmd->args);
@@ -29,6 +31,7 @@ void	free_node(t_cmd *cmd)
 	free(cmd);
 }
 
+/*		Free an a whole linked list		*/
 void	free_list(t_cmd **list)
 {
 	t_cmd	*iter;

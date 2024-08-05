@@ -6,12 +6,13 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 04:23:36 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/05 17:06:47 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/05 17:17:24 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
+/*		Check if the command is given with its absolute path	*/
 char	*cmd_absolute_path(char *full_path)
 {
 	if (access(full_path, X_OK) == -1)
@@ -19,6 +20,7 @@ char	*cmd_absolute_path(char *full_path)
 	return (ft_duplicate(full_path));
 }
 
+/*		Split the argument given into command and options		*/
 char	**get_args(char *cmd)
 {
 	char	**args;
@@ -28,6 +30,7 @@ char	**get_args(char *cmd)
 	return (args);
 }
 
+/*		Split env $PATH into many paths		*/
 char	**get_paths(char *envp)
 {
 	char	**paths;
@@ -38,6 +41,7 @@ char	**get_paths(char *envp)
 	return (paths);
 }
 
+/*		Extract the correct path of the command		*/
 char	*extract_path(char **paths, t_cmd *cmd)
 {
 	char	*buffer;
@@ -63,6 +67,7 @@ char	*extract_path(char **paths, t_cmd *cmd)
 	return (buffer);
 }
 
+/*		Extract the variable $PATH from environment variables		*/
 char	*envp_path(char **envp)
 {
 	int		i;

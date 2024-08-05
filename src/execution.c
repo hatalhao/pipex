@@ -6,12 +6,13 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 04:25:48 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/05 16:10:24 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/05 17:49:56 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
+/*		Print the error message assigned to the errno set		*/
 void	error_exit(void)
 {
 	char	*str;
@@ -21,6 +22,7 @@ void	error_exit(void)
 	exit(1);
 }
 
+/*		Create a child process and execute the necessary ops	*/
 void	file_to_pipe(t_data *info, t_cmd *cmd, t_cmd **list)
 {
 	if (pipe(info->pipefd) == -1)
@@ -47,6 +49,7 @@ void	file_to_pipe(t_data *info, t_cmd *cmd, t_cmd **list)
 	info->keeper = info->pipefd[0];
 }
 
+/*		Create a child process and execute the necessary ops	*/
 void	pipe_to_pipe(t_data *info, t_cmd *cmd, t_cmd **list)
 {
 	if (pipe(info->pipefd) == -1)
@@ -73,6 +76,7 @@ void	pipe_to_pipe(t_data *info, t_cmd *cmd, t_cmd **list)
 	info->keeper = info->pipefd[0];
 }
 
+/*		Create a child process and execute the necessary ops	*/
 void	pipe_to_file(t_data *info, t_cmd *cmd, t_cmd **list)
 {
 	info->pid = fork();
@@ -95,6 +99,7 @@ void	pipe_to_file(t_data *info, t_cmd *cmd, t_cmd **list)
 	close(info->outfile);
 }
 
+/*		Manage the execution of the program		*/
 void	executions(t_cmd **list, t_data *info)
 {
 	t_cmd	*tail;

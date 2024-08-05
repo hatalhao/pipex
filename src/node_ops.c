@@ -1,17 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utiles2.c                                          :+:      :+:    :+:   */
+/*   node_ops.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 04:27:55 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/05 15:16:58 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/05 17:44:04 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
+/*		Return the last node of a linked list	*/
 t_cmd	*last_node(t_cmd *list)
 {
 	if (!list)
@@ -25,6 +26,7 @@ t_cmd	*last_node(t_cmd *list)
 	return (list);
 }
 
+/*		Allocate memory for a node and fill its variables	*/
 t_cmd	*make_node(t_data *info, char *av)
 {
 	t_cmd	*new;

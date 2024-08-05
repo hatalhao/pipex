@@ -6,12 +6,14 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 04:32:29 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/05 17:08:02 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/05 17:40:28 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex_bonus.h"
 
+/*		Initialise a linked list that will contain
+the commands	and their options	*/
 t_cmd	**init_list_heredoc(t_cmd **list, t_data *info)
 {
 	int		i;
@@ -35,17 +37,22 @@ t_cmd	**init_list_heredoc(t_cmd **list, t_data *info)
 	return (list);
 }
 
-/*			*/
+/*		Allocate memory for the struct s_data (check the header file)
+and assign values to the struct's variables.	*/
 t_data	*heredoc_assignements(t_data *info, int ac, char **av, char **envp)
 {
 	info = (t_data *)malloc(sizeof(t_data));
 	if (!info)
 		return (NULL);
 	info->infile = open("/tmp/.heredoc_", O_RDWR | O_CREAT | O_APPEND, 0666);
+	if (info->infile == -1)
+		return (free (info), exit(1), NULL);
 	info->outfile = open(av[ac - 1], O_RDWR | O_CREAT | O_TRUNC, 0644);
+	if (info->outfile == -1)
+		return (clean_data_only_heredoc(info, 0), exit(1), NULL);
 	info->paths = get_paths(envp_path(envp));
-	if (info->infile == -1 || info->outfile == -1 || !info->paths)
-		return (free_arr(info->paths), free(info), NULL);
+	if (!info->paths)
+		return (clean_data_only_heredoc(info, 2), exit(1), NULL);
 	info->non_cmd = 4;
 	info->envp = envp;
 	info->limiter = ft_join(ft_duplicate(av[2]), ft_duplicate("\n"));
@@ -101,7 +108,7 @@ void	pipex_heredoc(int ac, char **av, char **envp)
 	list = init_list_heredoc(list, info);
 	if (!list)
 	{
-		clean_data_only_heredoc(info);
+		clean_data_only_heredoc(info, 2);
 		exit(1);
 	}
 	fill_the_doc(info);
