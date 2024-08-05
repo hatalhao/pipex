@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 04:23:36 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/05 11:26:00 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/05 17:06:47 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 char	*cmd_absolute_path(char *full_path)
 {
-	
 	if (access(full_path, X_OK) == -1)
 		return (NULL);
 	return (ft_duplicate(full_path));

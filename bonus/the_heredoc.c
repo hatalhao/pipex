@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 04:32:29 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/05 16:40:39 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/05 17:08:02 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	pipex_heredoc(int ac, char **av, char **envp)
 	list = init_list_heredoc(list, info);
 	if (!list)
 	{
-		clean_data_only_heredoc(info);	
+		clean_data_only_heredoc(info);
 		exit(1);
 	}
 	fill_the_doc(info);
