@@ -6,11 +6,11 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 04:23:36 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/04 06:02:09 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/05 07:24:12 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../pipex.h"
+#include "../includes/pipex.h"
 
 char	*cmd_absolute_path(char *full_path)
 {

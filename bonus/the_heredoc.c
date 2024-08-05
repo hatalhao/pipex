@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 04:32:29 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/04 06:15:56 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/04 08:08:42 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ t_cmd	**init_list_heredoc(t_cmd **list, t_data *info)
 	return (list);
 }
 
-/*		*/
+/*			*/
 t_data	*heredoc_assignements(t_data *info, int ac, char **av, char **envp)
 {
 	info = (t_data *)malloc(sizeof(t_data));

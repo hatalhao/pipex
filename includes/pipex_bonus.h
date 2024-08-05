@@ -1,19 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/04 04:27:04 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/04 07:44:32 by hatalhao         ###   ########.fr       */
+/*   Created: 2024/08/05 07:18:27 by hatalhao          #+#    #+#             */
+/*   Updated: 2024/08/05 07:46:26 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
-# include "libft/libft.h"
+# include "../libft/libft.h"
+# include "pipex.h"
 # include <signal.h>
 # include <sys/wait.h>
 
@@ -44,37 +45,38 @@ typedef struct s_data
 	pid_t			*pids;
 }					t_data;
 
-/*			pipex.c							*/
 void				pipex(int ac, char **av, char **envp);
 void				add_to_list(t_cmd **list, t_cmd *new);
 void				final_curtain(t_cmd **list, t_data *info, int bool);
 t_data				*assignements(t_data *info, int ac, char **av, char **envp);
+/*					pipex.c							*/
 
-/*					execution.c						*/
 void				error_exit(void);
 void				file_to_pipe(t_data *info, t_cmd *cmd, t_cmd **list);
 void				pipe_to_pipe(t_data *info, t_cmd *cmd, t_cmd **list);
 void				pipe_to_file(t_data *info, t_cmd *cmd, t_cmd **list);
 void				executions(t_cmd **list, t_data *info);
+/*					execution.c						*/
 
-/*					utiles2.c						*/
 t_cmd				*last_node(t_cmd *list);
 t_cmd				*make_node(t_data *info, char *av);
-void				heredoc_or_simple_file(int ac, char **av, char **envp);
+/*					utiles2.c						*/
 
-/*					the_heredoc.c					*/
-void				pipex_heredoc(int ac, char **av, char **envp);
-
-/*					free_variants.c						*/
 void				free_arr(char **arr);
 void				free_struct(t_cmd *cmd);
 void				free_list(t_cmd **list);
-
-/*					args_and_paths.c					*/
+/*					free_variants.c						*/
 
 char				**get_args(char *cmd);
 char				**get_paths(char *envp);
 char				*envp_path(char **envp);
 char				*extract_path(char **paths, t_cmd *cmd);
+/*					args_and_paths.c					*/
+
+void				pipex_heredoc(int ac, char **av, char **envp);
+/*					the_heredoc.c					*/
+
+void				heredoc_or_simple_file(int ac, char **av, char **envp);
+/*					main.c								*/
 
 #endif

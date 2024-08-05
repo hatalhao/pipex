@@ -6,11 +6,11 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 04:15:31 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/04 07:15:16 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/05 07:28:08 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../pipex.h"
+#include "../includes/pipex.h"
 
 /*		Clean all open file descriptors heap-allocated memory		*/
 void	final_curtain(t_cmd **list, t_data *info, int bool)

@@ -6,11 +6,11 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 04:25:48 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/04 07:43:14 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/05 07:24:12 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../pipex.h"
+#include "../includes/pipex.h"
 
 void	error_exit(void)
 {
@@ -104,7 +104,7 @@ void	executions(t_cmd **list, t_data *info)
 	index = 0;
 	tail = last_node(*list);
 	iter = *list;
-	info->pids = (int *)malloc(sizeof(int) * (info->ac - info->non_cmd));
+	info->pids = (int *) malloc(sizeof(int) * (info->ac - info->non_cmd));
 	while (iter)
 	{
 		if (iter == *list)
@@ -119,5 +119,4 @@ void	executions(t_cmd **list, t_data *info)
 	index = 0;
 	while (index < info->ac - info->non_cmd)
 		waitpid(info->pids[index++], &info->exit_status, 0);
-	fprintf(stderr, "exit status == %d\n", info->exit_status % 255);
 }
