@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 07:18:27 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/05 08:20:34 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/05 14:28:19 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,30 +20,6 @@
 
 # define STDIN 0  /* Standard input.  */
 # define STDOUT 1 /* Standard output.  */
-
-typedef struct s_cmd
-{
-	char			*path;
-	char			**args;
-	struct s_cmd	*next;
-}					t_cmd;
-
-typedef struct s_data
-{
-	char			*limiter;
-	char			**av;
-	char			**envp;
-	char			**paths;
-	int				ac;
-	int				non_cmd;
-	int				exit_status;
-	int				keeper;
-	int				infile;
-	int				outfile;
-	int				pipefd[2];
-	pid_t			pid;
-	pid_t			*pids;
-}					t_data;
 
 void				pipex(int ac, char **av, char **envp);
 void				add_to_list(t_cmd **list, t_cmd *new_node);
@@ -72,6 +48,11 @@ char				**get_paths(char *envp);
 char				*envp_path(char **envp);
 char				*extract_path(char **paths, t_cmd *cmd);
 /*					args_and_paths.c					*/
+
+void				clean_data_only_heredoc(t_data *info);
+void				clean_all_heredoc(t_data *info, t_cmd **list);
+void				clean_exp_fds(t_data *info, t_cmd **list);
+/*					cleaning_heredoc.c					*/
 
 void				pipex_heredoc(int ac, char **av, char **envp);
 /*					the_heredoc.c					*/

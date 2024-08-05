@@ -6,7 +6,7 @@ CC = cc
 
 BONUS = pipex_bonus
 
-CFLAGS = -Werror -Wall -Wextra #-g3 -fsanitize=address
+CFLAGS = -g3 -Werror -Wall -Wextra #-g3 -fsanitize=address
 
 SRC = $(wildcard src/*.c)
 
@@ -31,7 +31,7 @@ $(libft):
 	cd libft && mv libft.a ../
 
 clean: 
-	rm -rf $(OBJ)
+	rm -rf $(OBJ) $(OBJ_BONUS)
 	make -s -C libft clean
 
 fclean: clean

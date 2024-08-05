@@ -1,30 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_bonus.c                                       :+:      :+:    :+:   */
+/*   cleaning.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/05 04:22:03 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/05 09:29:17 by hatalhao         ###   ########.fr       */
+/*   Created: 2024/08/05 14:56:17 by hatalhao          #+#    #+#             */
+/*   Updated: 2024/08/05 15:08:39 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex_bonus.h"
+#include "../includes/pipex.h"
 
-void	heredoc_or_simple_file(int ac, char **av, char **envp)
+void	clean_data_mandatory(t_data *info, int flag)
 {
-	if (!ft_strncmp(av[1], "here_doc", ft_length(av[1]))
-		&& ft_length(av[1]) == 8)
-		pipex_heredoc(ac, av, envp);
-	else
-		pipex(ac, av, envp);
+	if (flag == 2)
+	{
+		close(info->infile);
+		close(info->outfile);
+	}
+	else if (flag == 1)
+		close(info->outfile);
+	else if (flag == 0)
+		close(info->infile);
+	if (info->paths)
+		free_arr(info->paths);
+	free (info);
+	info = NULL;
 }
 
-int	main(int ac, char **av, char **envp)
-{
-	if (ac < 5)
-		return (1);
-	heredoc_or_simple_file(ac, av, envp);
-	return (0);
-}
+// free_arr(info->paths)
+// free(info)

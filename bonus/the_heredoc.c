@@ -6,11 +6,11 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 04:32:29 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/04 08:08:42 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/05 14:25:37 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../pipex.h"
+#include "../includes/pipex_bonus.h"
 
 t_cmd	**init_list_heredoc(t_cmd **list, t_data *info)
 {
@@ -40,9 +40,9 @@ t_data	*heredoc_assignements(t_data *info, int ac, char **av, char **envp)
 		return (NULL);
 	info->infile = open("/tmp/.heredoc_", O_RDWR | O_CREAT | O_APPEND, 0666);
 	info->outfile = open(av[ac - 1], O_RDWR | O_CREAT | O_TRUNC, 0644);
-	if (info->infile == -1 || info->outfile == -1)
-		return (free(info), NULL);
 	info->paths = get_paths(envp_path(envp));
+	if (info->infile == -1 || info->outfile == -1 || !info->paths)
+		return (free_arr(info->paths), free(info), NULL);
 	info->non_cmd = 4;
 	info->envp = envp;
 	info->limiter = ft_join(ft_duplicate(av[2]), ft_duplicate("\n"));
@@ -71,14 +71,17 @@ void	fill_the_doc(t_data *info)
 	}
 }
 
-/*		This function is to reposition the write/read
+/*		Reposition the write/read
 offset since lseek() is not allowed		*/
-void	offset_reposition(t_data *info)
+void	offset_reposition(t_data *info, t_cmd **list)
 {
 	close(info->infile);
 	info->infile = open("/tmp/.heredoc_", O_RDWR, 0666);
 	if (info->infile == -1)
+	{
+		final_curtain(list, info, 1);
 		exit(1);
+	}
 }
 // will need cleaning up if (info->infile == -1)
 
@@ -95,9 +98,12 @@ void	pipex_heredoc(int ac, char **av, char **envp)
 	list = 0;
 	list = init_list_heredoc(list, info);
 	if (!list)
+	{
+		clean_data_only_heredoc(info);	
 		exit(1);
+	}
 	fill_the_doc(info);
-	offset_reposition(info);
+	offset_reposition(info, list);
 	executions(list, info);
 	ft_putstr_fd("HERE\n", 2);
 	final_curtain(list, info, 1);
