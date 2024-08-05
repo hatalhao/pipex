@@ -16,14 +16,6 @@ OBJ = $(SRC:.c=.o)
 
 OBJ_BONUS = $(SRC_BONUS:.c=.o)
 
-
-# ifeq ($(BONUS),true)
-#     bonus: $(BONUS)
-# else
-#     all: $(NAME)
-# endif
-
-# all: $(if$(filter $(BONUS),true),bonus,all)
 all: $(NAME)
 
 bonus: $(BONUS)
@@ -43,9 +35,7 @@ clean:
 	make -s -C libft clean
 
 fclean: clean
-	rm -rf $(NAME) $(libft)
-	rm -rf $(BONUS)
-
+	rm -rf $(NAME) $(libft) $(BONUS)
 
 re: fclean all
 
