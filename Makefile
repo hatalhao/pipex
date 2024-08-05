@@ -6,7 +6,7 @@ CC = cc
 
 BONUS = pipex_bonus
 
-CFLAGS = -g3 -Werror -Wall -Wextra #-g3 -fsanitize=address
+CFLAGS = -Werror -Wall -Wextra #-g3 #-fsanitize=address
 
 SRC = $(wildcard src/*.c)
 

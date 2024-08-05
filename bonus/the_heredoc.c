@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 04:32:29 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/05 14:25:37 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/05 16:40:39 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,10 @@ t_cmd	**init_list_heredoc(t_cmd **list, t_data *info)
 	{
 		new_node = make_node(info, info->av[i++]);
 		if (!new_node)
+		{
 			free_list(list);
+			return (NULL);
+		}
 		add_to_list(list, new_node);
 	}
 	return (list);
@@ -83,7 +86,6 @@ void	offset_reposition(t_data *info, t_cmd **list)
 		exit(1);
 	}
 }
-// will need cleaning up if (info->infile == -1)
 
 /*		Outline how the heredoc scenario will work		*/
 void	pipex_heredoc(int ac, char **av, char **envp)
@@ -92,10 +94,10 @@ void	pipex_heredoc(int ac, char **av, char **envp)
 	t_data	*info;
 
 	info = 0;
+	list = 0;
 	info = heredoc_assignements(info, ac, av, envp);
 	if (!info)
 		exit(1);
-	list = 0;
 	list = init_list_heredoc(list, info);
 	if (!list)
 	{
@@ -105,6 +107,5 @@ void	pipex_heredoc(int ac, char **av, char **envp)
 	fill_the_doc(info);
 	offset_reposition(info, list);
 	executions(list, info);
-	ft_putstr_fd("HERE\n", 2);
 	final_curtain(list, info, 1);
 }

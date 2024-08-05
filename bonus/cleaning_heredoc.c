@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 14:08:55 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/05 14:31:53 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/05 16:50:59 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,14 +26,4 @@ void	clean_all_heredoc(t_data *info, t_cmd **list)
 {
 	free_list(list);
 	clean_data_only_heredoc(info);
-}
-
-void	clean_exp_fds(t_data *info, t_cmd **list)
-{
-	free_arr(info->paths);
-	free (info->limiter);
-	free (info);
-	free_list(list);
-	info = NULL;
-	list = NULL;
 }

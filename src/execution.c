@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 04:25:48 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/05 15:15:54 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/05 16:10:24 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,6 @@ void	executions(t_cmd **list, t_data *info)
 	info->pids = (int *) malloc(sizeof(int) * (info->ac - info->non_cmd));
 	while (iter)
 	{
-		ft_putstr_fd("HERE\n", 2);
 		if (iter == *list)
 			file_to_pipe(info, iter, list);
 		else if (iter == tail)

@@ -6,13 +6,13 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 04:15:31 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/05 15:11:47 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/05 16:42:29 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-/*		Clean all open file descriptors heap-allocated memory		*/
+/*		Clean all heap-allocated memory		*/
 void	final_curtain(t_cmd **list, t_data *info, int flag)
 {
 	if (list)
@@ -54,6 +54,8 @@ t_cmd	**init_list(t_cmd **list, t_data *info)
 /*		Add a node to a linked list.	*/
 void	add_to_list(t_cmd **list, t_cmd *new_node)
 {
+	if (!new_node)
+		return ;
 	if (!*list)
 		*list = new_node;
 	else
@@ -96,7 +98,7 @@ void	pipex(int ac, char **av, char **envp)
 		exit(1);
 	list = init_list(list, info);
 	if (!list)
-		return (final_curtain(list, info, 0));
+		return (final_curtain(list, info, 0), exit(1));
 	executions(list, info);
 	final_curtain(list, info, 0);
 }

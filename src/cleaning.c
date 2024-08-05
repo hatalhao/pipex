@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/05 14:56:17 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/05 15:08:39 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/05 15:36:26 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,3 @@ void	clean_data_mandatory(t_data *info, int flag)
 	free (info);
 	info = NULL;
 }
-
-// free_arr(info->paths)
-// free(info)

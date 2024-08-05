@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 04:15:04 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/05 14:21:40 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/05 16:46:58 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	free_arr(char **arr)
 	free(arr);
 }
 
-void	free_struct(t_cmd *cmd)
+void	free_node(t_cmd *cmd)
 {
 	free_arr(cmd->args);
 	free(cmd->path);
@@ -41,7 +41,7 @@ void	free_list(t_cmd **list)
 	{
 		tmp = iter;
 		iter = iter->next;
-		free_struct(tmp);
+		free_node(tmp);
 	}
 	free(list);
 	list = NULL;

@@ -6,7 +6,7 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 04:27:04 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/05 15:07:38 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/05 16:55:59 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ t_cmd				*make_node(t_data *info, char *av);
 /*					utiles2.c						*/
 
 void				free_arr(char **arr);
-void				free_struct(t_cmd *cmd);
+void				free_node(t_cmd *cmd);
 void				free_list(t_cmd **list);
 /*					free_variants.c						*/
 
@@ -73,13 +73,6 @@ char				*extract_path(char **paths, t_cmd *cmd);
 /*					args_and_paths.c					*/
 
 void				clean_data_mandatory(t_data *info, int flag);
-
 /*					cleaning.c*/
-
-void				pipex_heredoc(int ac, char **av, char **envp);
-/*					the_heredoc.c					*/
-
-void				heredoc_or_simple_file(int ac, char **av, char **envp);
-/*					main.c								*/
 
 #endif
