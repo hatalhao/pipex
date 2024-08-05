@@ -6,21 +6,21 @@
 /*   By: hatalhao <hatalhao@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/04 04:15:31 by hatalhao          #+#    #+#             */
-/*   Updated: 2024/08/05 07:28:08 by hatalhao         ###   ########.fr       */
+/*   Updated: 2024/08/05 08:21:27 by hatalhao         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
 /*		Clean all open file descriptors heap-allocated memory		*/
-void	final_curtain(t_cmd **list, t_data *info, int bool)
+void	final_curtain(t_cmd **list, t_data *info, int flag)
 {
 	close(info->pipefd[0]);
 	close(info->pipefd[1]);
 	free_list(list);
 	free_arr(info->paths);
 	free (info->pids);
-	if (bool == 1)
+	if (flag == 1)
 	{
 		free(info->limiter);
 		if (unlink("/tmp/.heredoc_") == -1)
@@ -51,12 +51,12 @@ t_cmd	**init_list(t_cmd **list, t_data *info)
 }
 
 /*		Add a node to a linked list.	*/
-void	add_to_list(t_cmd **list, t_cmd *new)
+void	add_to_list(t_cmd **list, t_cmd *new_node)
 {
 	if (!*list)
-		*list = new;
+		*list = new_node;
 	else
-		(last_node(*list))->next = new;
+		(last_node(*list))->next = new_node;
 }
 
 /*		Allocate memory for the struct s_data (check the header file)
